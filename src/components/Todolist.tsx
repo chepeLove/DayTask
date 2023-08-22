@@ -2,9 +2,10 @@ import React from 'react';
 import {namePropsType} from "../App";
 import {Button} from "./Button";
 import Input from "./Input";
+import {v1} from "uuid";
 
 type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
@@ -21,7 +22,7 @@ type PropsType = {
 
 export function Todolist(props: PropsType) {
 
-    const removeTask = (id:number) =>{
+    const removeTask = (id:string) =>{
         props.setTasks(props.tasks.filter((task)=>task.id !== id))
     }
 
@@ -34,8 +35,8 @@ export function Todolist(props: PropsType) {
     }
 
     const addNewTask = (titleInput:string)=>{
-         let newTask = {id: (props.tasks.length + 1), title: titleInput , isDone: false}
-        props.setTasks([...props.tasks,newTask])
+         let newTask = {id: v1(), title: titleInput , isDone: false}
+        props.setTasks([newTask,...props.tasks])
     }
 
     const callBackButton  = () => {
@@ -55,10 +56,6 @@ export function Todolist(props: PropsType) {
             tasksFilter = props.tasks.filter((task)=> task.isDone)
         }
 
-        if(props.filter === 'The first three') {
-            tasksFilter = props.tasks.filter((task)=> task.id <=3 )
-        }
-
         return tasksFilter
     }
 
@@ -67,7 +64,7 @@ export function Todolist(props: PropsType) {
     return <div>
         <h3>{props.title}</h3>
         <div>
-            <Input titleInput={props.titleInput} setTitleInput={props.setTitleInput} />
+            <Input titleInput={props.titleInput} setTitleInput={props.setTitleInput} addNewTask={addNewTask} />
             <Button name ={'+'} titleInput={props.titleInput} callBackButton={callBackButton}/>
         </div>
         <ul>
@@ -86,7 +83,6 @@ export function Todolist(props: PropsType) {
             <button onClick={()=>{filterTask('All')}}>All</button>
             <button onClick={()=>{filterTask('Active')}}>Active</button>
             <button onClick={()=>{filterTask('Completed')}}>Completed</button>
-            <button onClick={()=>{filterTask('The first three')}}>The first three</button>
         </div>
     </div>
 }
