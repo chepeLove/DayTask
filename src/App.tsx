@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import './App.css';
 import {Todolist} from './components/Todolist';
 import {v1} from "uuid";
@@ -17,9 +17,7 @@ function App() {
 
     let [filter,setFilter] = useState<namePropsType>('All')
 
-    let [titleInput,setTitleInput] = useState<string>('')
-
-
+    const onChangeRef =useRef< HTMLInputElement>(null)
 
     return (
         <div className="App">
@@ -28,8 +26,7 @@ function App() {
                       setTasks={setTasks}
                       setFilter={setFilter}
                       filter={filter}
-                      titleInput={titleInput}
-                      setTitleInput={setTitleInput}
+                      onChangeRef={onChangeRef}
             />
         </div>
     );

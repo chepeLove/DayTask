@@ -2,7 +2,6 @@ import React from 'react';
 
 type ButtonPropsType = {
     name:string
-    titleInput:string
     callBackButton:()=>void
 }
 

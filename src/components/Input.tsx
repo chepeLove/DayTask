@@ -1,27 +1,21 @@
-import React, {ChangeEvent, KeyboardEvent} from 'react';
+import React, {KeyboardEvent, RefObject} from 'react';
 
 type InputPropsType = {
-    titleInput:string
-    setTitleInput:(titleInput:string)=>void
     addNewTask:(titleInput:string)=> void
+    onChangeRef:RefObject<HTMLInputElement>
+    addTask:()=>void
 }
 
 export const Input = (props:InputPropsType) => {
 
-    const onChangeHandler = (event:ChangeEvent<HTMLInputElement>)=>{
-        props.setTitleInput(event.currentTarget.value)
-    }
-
     const onKeyPressHandler = (event:KeyboardEvent<HTMLInputElement>) => {
         if(event.key === 'Enter'){
-            props.addNewTask(event.currentTarget.value)
-            props.setTitleInput('')
+            props.addTask()
         }
     }
 
     return (
-        <input onChange={onChangeHandler}
-               value={props.titleInput}
+         <input ref ={props.onChangeRef}
                onKeyDown={onKeyPressHandler}
         />
     );

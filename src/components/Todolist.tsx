@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import {namePropsType} from "../App";
 import {Button} from "./Button";
 import Input from "./Input";
 import {v1} from "uuid";
+import {useAutoAnimate} from "@formkit/auto-animate/react";
 
 type TaskType = {
     id: string
@@ -16,34 +17,46 @@ type PropsType = {
     setTasks:(tasks:TaskType[])=>void
     setFilter:(name:namePropsType)=>void
     filter:string
-    titleInput:string
-    setTitleInput:(titleInput:string)=>void
+    onChangeRef:RefObject<HTMLInputElement>
 }
 
 export function Todolist(props: PropsType) {
+
+    const [listRef] = useAutoAnimate<HTMLUListElement>()
 
     const removeTask = (id:string) =>{
         props.setTasks(props.tasks.filter((task)=>task.id !== id))
     }
 
-    const filterTask = (name:namePropsType) =>{
-        props.setFilter(name)
+    const onAllClickHandler = ()=>{
+        props.setFilter('All')
+    }
+    const onActiveClickHandler = ()=>{
+        props.setFilter('Active')
+    }
+    const onCompletedClickHandler = ()=>{
+        props.setFilter('Completed')
     }
 
     const removeAllTask = ()=>{
         props.setTasks([])
     }
 
-    const addNewTask = (titleInput:string)=>{
-         let newTask = {id: v1(), title: titleInput , isDone: false}
+    const addNewTask = (title:string)=>{
+         let newTask = {id: v1(), title: title , isDone: false}
         props.setTasks([newTask,...props.tasks])
     }
 
-    const callBackButton  = () => {
-        addNewTask(props.titleInput)
-        props.setTitleInput('')
+    const addTask = ()=>{
+        if(props.onChangeRef.current){
+            addNewTask(props.onChangeRef.current.value)
+            props.onChangeRef.current.value=''
+        }
     }
 
+    const callBackButton  = () => {
+        addTask()
+    }
 
     const showSelectedTasks = () => {
         let tasksFilter = props.tasks
@@ -59,30 +72,29 @@ export function Todolist(props: PropsType) {
         return tasksFilter
     }
 
-
-
     return <div>
         <h3>{props.title}</h3>
         <div>
-            <Input titleInput={props.titleInput} setTitleInput={props.setTitleInput} addNewTask={addNewTask} />
-            <Button name ={'+'} titleInput={props.titleInput} callBackButton={callBackButton}/>
+            <Input  addNewTask={addNewTask} onChangeRef={props.onChangeRef} addTask={addTask} />
+            <Button name ={'+'} callBackButton={callBackButton}/>
         </div>
-        <ul>
+        <ul ref={listRef}>
             {showSelectedTasks().map((task)=>{
+                const onClickHandler = () => removeTask(task.id)
                 return(
                     <li key={task.id}>
                         <input type="checkbox" checked={task.isDone}/>
                         <span>{task.title}</span>
-                        <button onClick={()=>{removeTask(task.id)}}>x</button>
+                        <button onClick={onClickHandler}>x</button>
                     </li>
                 )
             })}
         </ul>
         <button onClick={removeAllTask}>DELETE ALL TASKS</button>
         <div>
-            <button onClick={()=>{filterTask('All')}}>All</button>
-            <button onClick={()=>{filterTask('Active')}}>Active</button>
-            <button onClick={()=>{filterTask('Completed')}}>Completed</button>
+            <button onClick={onAllClickHandler}>All</button>
+            <button onClick={onActiveClickHandler}>Active</button>
+            <button onClick={onCompletedClickHandler}>Completed</button>
         </div>
     </div>
 }
