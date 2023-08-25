@@ -1,9 +1,10 @@
 import React, {RefObject} from 'react';
 import {namePropsType} from "../App";
 import {Button} from "./Button";
-import Input from "./Input";
+import {Input} from "./Input";
 import {v1} from "uuid";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
+
 
 type TaskType = {
     id: string
@@ -18,6 +19,8 @@ type PropsType = {
     setFilter:(name:namePropsType)=>void
     filter:string
     onChangeRef:RefObject<HTMLInputElement>
+    check:boolean
+    setCheck:(check:boolean)=>void
 }
 
 export function Todolist(props: PropsType) {
@@ -43,7 +46,7 @@ export function Todolist(props: PropsType) {
     }
 
     const addNewTask = (title:string)=>{
-         let newTask = {id: v1(), title: title , isDone: false}
+         let newTask = {id: v1(), title: title , isDone:props.check}
         props.setTasks([newTask,...props.tasks])
     }
 
@@ -75,7 +78,7 @@ export function Todolist(props: PropsType) {
     return <div>
         <h3>{props.title}</h3>
         <div>
-            <Input  addNewTask={addNewTask} onChangeRef={props.onChangeRef} addTask={addTask} />
+            <Input  onChangeRef={props.onChangeRef} addTask={addTask} />
             <Button name ={'+'} callBackButton={callBackButton}/>
         </div>
         <ul ref={listRef}>
@@ -83,6 +86,7 @@ export function Todolist(props: PropsType) {
                 const onClickHandler = () => removeTask(task.id)
                 return(
                     <li key={task.id}>
+                        {/*<CheckBox checked = {props.check} setCheck={props.setCheck}/>*/}
                         <input type="checkbox" checked={task.isDone}/>
                         <span>{task.title}</span>
                         <button onClick={onClickHandler}>x</button>

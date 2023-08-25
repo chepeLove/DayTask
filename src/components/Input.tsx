@@ -1,7 +1,6 @@
 import React, {KeyboardEvent, RefObject} from 'react';
 
 type InputPropsType = {
-    addNewTask:(titleInput:string)=> void
     onChangeRef:RefObject<HTMLInputElement>
     addTask:()=>void
 }
@@ -20,5 +19,3 @@ export const Input = (props:InputPropsType) => {
         />
     );
 };
-
-export default Input;

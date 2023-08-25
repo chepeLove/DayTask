@@ -7,7 +7,7 @@ export type namePropsType = 'All'|'Active'|'Completed'
 
 function App() {
 
-    let [tasks ,setTasks]= useState([
+    const [tasks ,setTasks]= useState([
         {id: v1(), title: "HTML&CSS", isDone: true},
         {id: v1(), title: "JS", isDone: true},
         {id: v1(), title: "ReactJS", isDone: false},
@@ -15,9 +15,11 @@ function App() {
         {id: v1(), title: "GraphQL", isDone: false},
     ])
 
-    let [filter,setFilter] = useState<namePropsType>('All')
+    const [filter,setFilter] = useState<namePropsType>('All')
 
     const onChangeRef =useRef< HTMLInputElement>(null)
+
+    const [check,setCheck] = useState<boolean>(false)
 
     return (
         <div className="App">
@@ -27,6 +29,8 @@ function App() {
                       setFilter={setFilter}
                       filter={filter}
                       onChangeRef={onChangeRef}
+                      check={check}
+                      setCheck={setCheck}
             />
         </div>
     );
