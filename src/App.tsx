@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from './components/Todolist';
 import {v1} from "uuid";
@@ -17,20 +17,25 @@ function App() {
 
     const [filter,setFilter] = useState<namePropsType>('All')
 
-    const onChangeRef =useRef< HTMLInputElement>(null)
+    const [title,setTitle]=useState('')
 
     const [check,setCheck] = useState<boolean>(false)
 
+    const [error,setError]=useState<string | null>(null)
+
     return (
         <div className="App">
-            <Todolist title = "What to learn"
+            <Todolist name = "What to learn"
                       tasks={tasks}
                       setTasks={setTasks}
                       setFilter={setFilter}
                       filter={filter}
-                      onChangeRef={onChangeRef}
+                      title={title}
+                      setTitle={setTitle}
                       check={check}
                       setCheck={setCheck}
+                      error={error}
+                      setError={setError}
             />
         </div>
     );
