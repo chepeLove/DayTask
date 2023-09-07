@@ -5,15 +5,16 @@ import {Input} from "./Input";
 import {v1} from "uuid";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
 import {CheckBox} from "./CheckBox";
+import {Task} from "./Task";
 
 
-type TaskType = {
+export type TaskType = {
     id: string
     title: string
     isDone: boolean
 }
 
-type PropsType = {
+export type PropsType = {
     title: string
     setTitle: (title: string) => void
     name: string
@@ -70,11 +71,7 @@ export function Todolist(props: PropsType) {
 
 
     const changeTaskStatus = (id: string, isDone: boolean) => {
-        let task = props.tasks.find(t => t.id === id)
-        if (task) {
-            task.isDone = isDone
-            props.setTasks([...props.tasks])
-        }
+        props.setTasks(props.tasks.map(el=>el.id===id ?{...el,isDone:isDone}:el))
     }
 
     const showSelectedTasks = () => {
@@ -91,6 +88,12 @@ export function Todolist(props: PropsType) {
         return tasksFilter
     }
 
+    const tasksComponent = props.tasks.length ?
+        <ul ref={listRef}>
+            {showSelectedTasks().map((task) => <Task {...task} removeTask={removeTask} changeTaskStatus={changeTaskStatus}/>
+            )}
+        </ul> : <div><span>You have not added tasks yet</span></div>
+
     return <div>
         <h3>{props.name}</h3>
         <div>
@@ -98,22 +101,7 @@ export function Todolist(props: PropsType) {
             <Button name={'+'} callBackButton={callBackButton}/>
             {props.error && <div className='error-message'>{props.error}</div>}
         </div>
-        <ul ref={listRef}>
-            {showSelectedTasks().map((task) => {
-                const onClickHandler = () => removeTask(task.id)
-                const onChangeCheckBox = (event: ChangeEvent<HTMLInputElement>) => {
-                    let newIsDoneValue = event.currentTarget.checked
-                    changeTaskStatus(task.id, newIsDoneValue)
-                }
-                return (
-                    <li key={task.id} className={task.isDone ? 'is-done':''}>
-                        <CheckBox checked={task.isDone} onChange={onChangeCheckBox}/>
-                        <span>{task.title}</span>
-                        <button onClick={onClickHandler}>x</button>
-                    </li>
-                )
-            })}
-        </ul>
+        {tasksComponent}
         <button onClick={removeAllTask}>DELETE ALL TASKS</button>
         <div>
             <button className={props.filter ==='All'? 'active-filter':''} onClick={onAllClickHandler}>All</button>
