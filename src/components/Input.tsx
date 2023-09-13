@@ -1,33 +1,29 @@
 import React, {ChangeEvent, KeyboardEvent} from 'react';
 
 type InputPropsType = {
-    title:string
-    addTask:()=>void
-    setTitle:(title:string)=>void
-    setError:(error: string | null)=>void
-    error:string | null
+    value?: string
+    onChangeCallback: (e: ChangeEvent<HTMLInputElement>) => void
+    onKeyDownCallback?: (e: KeyboardEvent<HTMLInputElement>) => void
+    error?: string | null
 }
 
-export const Input = (props:InputPropsType) => {
+export const Input = (props: InputPropsType) => {
 
-    const onChangeHandler = (event:ChangeEvent<HTMLInputElement>)=>{
-        props.setTitle(event.currentTarget.value)
+    const oncChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        props.onChangeCallback(e)
     }
-
-    const onKeyPressHandler = (event:KeyboardEvent<HTMLInputElement>) => {
-        props.setError(null)
-        if(event.key === 'Enter'){
-            props.addTask()
-            props.setTitle('')
+    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (props.onKeyDownCallback) {
+            props.onKeyDownCallback(e);
         }
     }
 
     return (
-         <input
-             className={props.error ? 'error':''}
-             value={props.title}
-               onKeyDown={onKeyPressHandler}
-                onChange={onChangeHandler}
+        <input
+            className={props.error ? 'error' : ''}
+            value={props.value}
+            onKeyDown={onKeyDownHandler}
+            onChange={oncChangeHandler}
         />
     );
 };
