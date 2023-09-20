@@ -1,8 +1,9 @@
-import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
+import React  from 'react';
 import {Task} from './Task';
 import {FilterValuesType, TaskType} from "../App";
-import {Input} from "./Input";
 import {Button} from "./Button";
+import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
 
 
 type PropsType = {
@@ -15,6 +16,8 @@ type PropsType = {
     addTask: (todolistId: string, title: string) => void
     changeTaskStatus: (todolistId: string, taskId: string, taskStatus: boolean) => void
     removeTodolist: (todolistId: string) => void
+    changeTaskTitle:(todolistId1:string,taskId:string,newTitle:string) => void
+    changeTitleTodolist:(todolistId:string,todolistTitle:string) => void
 }
 
 export const Todolist: React.FC<PropsType> = (
@@ -27,12 +30,10 @@ export const Todolist: React.FC<PropsType> = (
         changeFilter,
         addTask,
         changeTaskStatus,
-        removeTodolist
+        removeTodolist,
+        changeTaskTitle,
+        changeTitleTodolist
     }) => {
-
-    const [value, setValue] = useState('')
-
-    const [error, setError] = useState<string | null>(null)
 
     const changeFilterOnClickHandlerCreator = (nextFilter: FilterValuesType) => {
         return () => changeFilter(todolistId, nextFilter)
@@ -48,12 +49,17 @@ export const Todolist: React.FC<PropsType> = (
                     const changeTaskStatusCallback = (isDone: boolean) => {
                         changeTaskStatus(todolistId, t.id, isDone)
                     }
+
+                    const changeTitleTaskHandler = (newTitle:string) => {
+                        changeTaskTitle(todolistId,t.id,newTitle)
+                    }
                     return (
                         <Task
                             key={t.id}
                             {...t}
                             removeTask={removeTaskCallback}
                             changeTaskStatus={changeTaskStatusCallback}
+                            changeTitleCallback={changeTitleTaskHandler}
                         />
                     )
                 })}
@@ -61,53 +67,27 @@ export const Todolist: React.FC<PropsType> = (
             : <span>Your task list is empty</span>
 
 
-    const isAddTaskPossible = !value
-
-
-    const addTaskHandler = () => {
-
-        if (value.trim()) {
-            addTask(todolistId, value.trim())
-        } else {
-            setError('Please, enter text')
-        }
-
-        setValue('')
-
+    const addTaskTodolist = (title: string) => {
+        addTask(todolistId,title)
     }
-    const onClickAddTAskHandler = () => {
-        !isAddTaskPossible &&
-        addTaskHandler()
-    }
-
-    const onChangeSetValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(e.currentTarget.value)
-    }
-
-    const onKeyDownSetValueHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        error && setError(null)
-        e.key === 'Enter' && addTaskHandler()
-    }
-
 
     const removeTodolistHandler = () => {
         removeTodolist(todolistId)
     }
 
+    const changeTitleTodolistHandler = (newTitle:string) => {
+        changeTitleTodolist(todolistId,newTitle)
+    }
+
     return <div className="todolist">
         <div>
-            <Button name= {'X'} callBackButton={removeTodolistHandler}/>
-            <h3>{title}</h3>
+            <Button name={'X'} callBackButton={removeTodolistHandler}/>
+            <h3>
+                <EditableSpan value={title} onChangeTitleCallback={changeTitleTodolistHandler}/>
+            </h3>
         </div>
         <div>
-            <Input
-                value={value}
-                onChangeCallback={onChangeSetValueHandler}
-                onKeyDownCallback={onKeyDownSetValueHandler}
-                error={error}
-            />
-            <Button name={'+'} callBackButton={onClickAddTAskHandler} disabled={isAddTaskPossible}/>
-            {error && <div className="error-message">{error}</div>}
+            <AddItemForm addItem={addTaskTodolist}/>
         </div>
         {tasksList}
         <div>

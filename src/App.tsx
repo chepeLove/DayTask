@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from './components/Todolist';
 import {v1} from "uuid";
+import {AddItemForm} from "./components/AddItemForm";
 
 export type FilterValuesType = 'all'|'active'|'completed'
 
@@ -28,23 +29,23 @@ function App() {
     const todolistId1 = v1()
     const todolistId2 = v1()
 
-    const [todolist, setTodolist] = useState<TodolistType[]>([
+    const [todolists, setTodolists] = useState<TodolistType[]>([
         {todolistId: todolistId1, todolistTitle: 'What to learn', filter: 'all'},
         {todolistId: todolistId2, todolistTitle: 'What to buy', filter: 'all'}
     ])
 
     const [tasks, setTasks] = useState<TasksStateType>({
         [todolistId1]: [
-            {id: crypto.randomUUID(), title: 'HTML&CSS', isDone: true},
-            {id: crypto.randomUUID(), title: 'JS', isDone: true},
-            {id: crypto.randomUUID(), title: 'ReactJS', isDone: false},
-            {id: crypto.randomUUID(), title: 'Rest API', isDone: false},
-            {id: crypto.randomUUID(), title: 'GraphQL', isDone: false},
+            {id: v1(), title: 'HTML&CSS', isDone: true},
+            {id: v1(), title: 'JS', isDone: true},
+            {id: v1(), title: 'ReactJS', isDone: false},
+            {id: v1(), title: 'Rest API', isDone: false},
+            {id: v1(), title: 'GraphQL', isDone: false},
         ],
         [todolistId2]: [
-            {id: crypto.randomUUID(), title: 'Beer', isDone: true},
-            {id: crypto.randomUUID(), title: 'Fish', isDone: true},
-            {id: crypto.randomUUID(), title: 'Nuts', isDone: false}
+            {id: v1(), title: 'Beer', isDone: true},
+            {id: v1(), title: 'Fish', isDone: true},
+            {id: v1(), title: 'Nuts', isDone: false}
         ]
 
     });
@@ -52,7 +53,7 @@ function App() {
 
     const addTask = (todolistId: string, taskTitle: string) => {
         const newTask: TaskType = {
-            id: crypto.randomUUID(),
+            id: v1(),
             title: taskTitle,
             isDone: false
         }
@@ -68,15 +69,11 @@ function App() {
     }
 
     const changeFilter = (todolistId: string, filter: FilterValuesType) => {
-        setTodolist(todolist.map(t => t.todolistId === todolistId ? {...t, filter} : t))
-    }
-
-    const changeTaskTitle = (todolistId: string, title: string) => {
-        setTodolist(todolist.map(t => t.todolistId === todolistId ? {...t, title} : t))
+        setTodolists(todolists.map(t => t.todolistId === todolistId ? {...t, filter} : t))
     }
 
     const removeTodolist = (todolistId: string) => {
-        setTodolist(todolist.filter(t => t.todolistId !== todolistId))
+        setTodolists(todolists.filter(t => t.todolistId !== todolistId))
         delete tasks[todolistId]
     }
 
@@ -91,7 +88,25 @@ function App() {
         }
     }
 
-    const todolistComponents: JSX.Element[] = todolist.map(t => {
+    const addTodolist = (title:string) => {
+        let newTodolistId = v1()
+        let newTodolist:TodolistType = {todolistId:newTodolistId,todolistTitle:title,filter:'all'}
+        setTodolists([newTodolist,...todolists])
+        setTasks({
+            ...tasks,
+            [newTodolistId]:[]
+        })
+    }
+
+    const changeTaskTitle = (todolistId:string,taskId:string,newTitle:string) => {
+        setTasks({...tasks,[todolistId]:tasks[todolistId].map(task => task.id === taskId ? {...task,title:newTitle}: task)})
+    }
+
+    const changeTitleTodolist = (todolistId:string,todolistTitle:string) => {
+        setTodolists(todolists.map(todolist => todolist.todolistId === todolistId ? {...todolist,todolistTitle:todolistTitle}:todolist))
+    }
+
+    const todolistComponents: JSX.Element[] = todolists.map(t => {
 
         const tasksForTodolist: TaskType[] = getTaskForRender(tasks[t.todolistId], t.filter)
 
@@ -107,6 +122,8 @@ function App() {
                 addTask={addTask}
                 changeTaskStatus={changeTaskStatus}
                 removeTodolist={removeTodolist}
+                changeTaskTitle={changeTaskTitle}
+                changeTitleTodolist={changeTitleTodolist}
             />
         );
     })
@@ -115,6 +132,7 @@ function App() {
 
     return (
         <div className="App">
+            <AddItemForm addItem={addTodolist}/>
             {todolistComponents}
         </div>
     );

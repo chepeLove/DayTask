@@ -3,6 +3,8 @@
     padding: 30px;
     display: flex;
     background-color: beige;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .App > div {
