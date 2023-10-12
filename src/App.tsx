@@ -8,16 +8,15 @@ import {
     changeFilterAC,
     changeTitleTodolistAC,
     removeTodolistAC,
-    TodolistReducer
-} from "./reducers/TodolistReducer";
+    TodolistsReducer
+} from "./reducers/todolists-reducer";
 import {
     addTaskAC,
-    addTaskInNewTodolistAC,
     changeTaskStatusAC,
     changeTaskTitleAC,
     removeTaskAC,
-    TaskReducer
-} from "./reducers/TaskReducer";
+    TasksReducer
+} from "./reducers/tasks-reducer";
 
 export type FilterValuesType = 'all'|'active'|'completed'
 
@@ -33,9 +32,6 @@ export type TodolistType = {
     filter: FilterValuesType
 }
 
-export type TasksStateType = {
-    [todolistId: string]: TaskType[]
-}
 
 function App() {
 
@@ -44,12 +40,12 @@ function App() {
     const todolistId1 = v1()
     const todolistId2 = v1()
 
-    const [todolist, dispatchTodolist] = useReducer(TodolistReducer,[
+    const [todolist, dispatchTodolist] = useReducer(TodolistsReducer,[
         {todolistId: todolistId1, todolistTitle: 'What to learn', filter: 'all'},
         {todolistId: todolistId2, todolistTitle: 'What to buy', filter: 'all'}
     ])
 
-    const [tasks, dispatchTasks] = useReducer(TaskReducer,{
+    const [tasks, dispatchTasks] = useReducer(TasksReducer,{
         [todolistId1]: [
             {id: v1(), title: 'HTML&CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
@@ -83,8 +79,23 @@ function App() {
     }
 
     const removeTodolist = (todolistId: string) => {
-        dispatchTodolist(removeTodolistAC(todolistId))
-        delete tasks[todolistId]
+        let action = removeTodolistAC(todolistId)
+        dispatchTodolist(action)
+        dispatchTasks(action)
+    }
+
+    const addTodolist = (title:string) => {
+        let action = addTodolistAC(title)
+       dispatchTodolist(action)
+        dispatchTasks(action)
+    }
+
+    const changeTaskTitle = (todolistId:string,taskId:string,newTitle:string) => {
+       dispatchTasks(changeTaskTitleAC(todolistId,taskId,newTitle))
+    }
+
+    const changeTitleTodolist = (todolistId:string,todolistTitle:string) => {
+        dispatchTodolist(changeTitleTodolistAC(todolistId,todolistTitle))
     }
 
     const getTaskForRender = (allTask: TaskType[], nextFiler: FilterValuesType) => {
@@ -96,20 +107,6 @@ function App() {
             default:
                 return allTask
         }
-    }
-
-    const addTodolist = (title:string) => {
-        let newTodolistId = v1()
-       dispatchTodolist(addTodolistAC(title,newTodolistId))
-        dispatchTasks(addTaskInNewTodolistAC(newTodolistId))
-    }
-
-    const changeTaskTitle = (todolistId:string,taskId:string,newTitle:string) => {
-       dispatchTasks(changeTaskTitleAC(todolistId,taskId,newTitle))
-    }
-
-    const changeTitleTodolist = (todolistId:string,todolistTitle:string) => {
-        dispatchTodolist(changeTitleTodolistAC(todolistId,todolistTitle))
     }
 
     const todolistComponents: JSX.Element[] = todolist.map(t => {
@@ -133,8 +130,6 @@ function App() {
             />
         );
     })
-
-    // UI
 
     return (
         <div className="App">
