@@ -8,7 +8,7 @@ export type TaskType = {
 }
 
 export type TasksStateType = {
-    [todolistId: string]: TaskType[]
+    [key: string]: TaskType[]
 }
 
 type GeneralACType = AddTaskACType | RemoveTaskACType
