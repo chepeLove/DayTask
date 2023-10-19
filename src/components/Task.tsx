@@ -1,8 +1,8 @@
 import React, {ChangeEvent} from 'react';
-import {TaskType} from "../App";
 import {CheckBox} from "./CheckBox";
 import {Button} from "./Button";
 import {EditableSpan} from "./EditableSpan";
+import {TaskType} from "../reducers/tasks-reducer";
 
 
 type TaskPropsType = {

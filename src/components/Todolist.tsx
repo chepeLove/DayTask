@@ -1,57 +1,65 @@
 import React  from 'react';
 import {Task} from './Task';
-import {FilterValuesType, TaskType} from "../App";
 import {Button} from "./Button";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from "../reducers/tasks-reducer";
+import {
+    changeFilterAC,
+    changeTitleTodolistAC,
+    FilterValuesType,
+    removeTodolistAC,
+    TodolistType
+} from "../reducers/todolists-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../store/store";
 
 
 type PropsType = {
-    todolistId: string
-    title: string
-    filter: FilterValuesType
-    tasks: Array<TaskType>
-    removeTask: (todolistId: string, taskId: string) => void
-    changeFilter: (todolistId: string, value: FilterValuesType) => void
-    addTask: (todolistId: string, title: string) => void
-    changeTaskStatus: (todolistId: string, taskId: string, taskStatus: boolean) => void
-    removeTodolist: (todolistId: string) => void
-    changeTaskTitle:(todolistId1:string,taskId:string,newTitle:string) => void
-    changeTitleTodolist:(todolistId:string,todolistTitle:string) => void
+    todolist: TodolistType
 }
 
-export const Todolist: React.FC<PropsType> = (
-    {
-        todolistId,
-        title,
-        filter,
-        tasks,
-        removeTask,
-        changeFilter,
-        addTask,
-        changeTaskStatus,
-        removeTodolist,
-        changeTaskTitle,
-        changeTitleTodolist
-    }) => {
+export const Todolist: React.FC<PropsType> = ({todolist}) => {
 
-    const changeFilterOnClickHandlerCreator = (nextFilter: FilterValuesType) => {
-        return () => changeFilter(todolistId, nextFilter)
+    const {todolistId,todolistTitle,filter} = todolist
+
+    const tasks = useSelector<AppRootStateType,TaskType[]>(state => state.tasks[todolistId])
+    const dispatch = useDispatch()
+
+    const removeTodolist = () => {
+        let action = removeTodolistAC(todolistId)
+        dispatch(action)
     }
+
+    const changeTitleTodolist = () => {
+        dispatch(changeTitleTodolistAC(todolistId,todolistTitle))
+    }
+
+    const getTaskForRender = (tasks: TaskType[], filter: FilterValuesType) => {
+        switch (filter) {
+            case 'active':
+                return tasks.filter(t => !t.isDone)
+            case 'completed':
+                return tasks.filter(t => t.isDone)
+            default:
+                return tasks
+        }
+    }
+    const tasksForTodolist: TaskType[] = getTaskForRender(tasks,filter)
 
     const tasksList: JSX.Element =
         tasks.length
             ? <ul>
-                {tasks.map(t => {
+                {tasksForTodolist.map(t => {
                     const removeTaskCallback = () => {
-                        removeTask(todolistId, t.id)
+                        dispatch(removeTaskAC(todolistId,t.id))
                     }
                     const changeTaskStatusCallback = (isDone: boolean) => {
-                        changeTaskStatus(todolistId, t.id, isDone)
+                        dispatch(changeTaskStatusAC(todolistId,t.id,isDone))
                     }
 
                     const changeTitleTaskHandler = (newTitle:string) => {
-                        changeTaskTitle(todolistId,t.id,newTitle)
+                        dispatch(changeTaskTitleAC(todolistId,t.id,newTitle))
                     }
                     return (
                         <Task
@@ -66,42 +74,29 @@ export const Todolist: React.FC<PropsType> = (
             </ul>
             : <span>Your task list is empty</span>
 
-
-    const addTaskTodolist = (title: string) => {
-        addTask(todolistId,title)
-    }
-
-    const removeTodolistHandler = () => {
-        removeTodolist(todolistId)
-    }
-
-    const changeTitleTodolistHandler = (newTitle:string) => {
-        changeTitleTodolist(todolistId,newTitle)
-    }
-
     return <div className="todolist">
         <div>
-            <Button name={'X'} callBackButton={removeTodolistHandler}/>
+            <Button name={'X'} callBackButton={removeTodolist}/>
             <h3>
-                <EditableSpan value={title} onChangeTitleCallback={changeTitleTodolistHandler}/>
+                <EditableSpan value={todolistTitle} onChangeTitleCallback={changeTitleTodolist}/>
             </h3>
         </div>
         <div>
-            <AddItemForm addItem={addTaskTodolist}/>
+            <AddItemForm addItem={(title)=> dispatch(addTaskAC(todolistId,title))}/>
         </div>
         {tasksList}
         <div>
             <Button className={filter === 'all' ? 'btn-filter-active' : 'btn-filter'}
                     name={'All'}
-                    callBackButton={changeFilterOnClickHandlerCreator('all')}
+                    callBackButton={()=> dispatch(changeFilterAC(todolistId,'all'))}
             />
             <Button className={filter === 'active' ? 'btn-filter-active' : 'btn-filter'}
                     name={'Active'}
-                    callBackButton={changeFilterOnClickHandlerCreator('active')}
+                    callBackButton={() => dispatch(changeFilterAC(todolistId,'active'))}
             />
             <Button className={filter === 'completed' ? 'btn-filter-active' : 'btn-filter'}
                     name={'Completed'}
-                    callBackButton={changeFilterOnClickHandlerCreator('completed')}
+                    callBackButton={() => dispatch(changeFilterAC(todolistId,'completed'))}
             />
         </div>
     </div>
