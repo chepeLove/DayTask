@@ -1,11 +1,11 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useCallback, useState} from 'react';
 import {Input} from "./Input";
 import {Button} from "./Button";
 
 type AddItemFormType = {
     addItem:(title:string)=>void
 }
-export const AddItemForm:React.FC<AddItemFormType> = ({addItem}) => {
+export const AddItemForm:React.FC<AddItemFormType> = React.memo(({addItem}) => {
 
     const [title, setTitle] = useState('')
 
@@ -24,21 +24,21 @@ export const AddItemForm:React.FC<AddItemFormType> = ({addItem}) => {
 
     }
 
-    const onChangeSetValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeSetValueHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
-    }
+    },[setTitle])
 
-    const onKeyDownSetValueHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        const onKeyDownSetValueHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         error && setError(null)
         e.key === 'Enter' && addNewItem()
-    }
+    },[setError,addNewItem])
 
-    const onClickAddTAskHandler = () => {
-        !isAddTaskPossible &&
-        addNewItem()
-    }
+        const onClickAddTAskHandler = useCallback(() => {
+            !isAddTaskPossible &&
+            addNewItem()
+        },[addNewItem])
 
-    return (
+        return (
         <div>
             <Input
                 value={title}
@@ -50,4 +50,5 @@ export const AddItemForm:React.FC<AddItemFormType> = ({addItem}) => {
             {error && <div className="error-message">{error}</div>}
         </div>
     );
-};
+}
+)

@@ -5,36 +5,37 @@ type InputPropsType = {
     onChangeCallback?: (e: ChangeEvent<HTMLInputElement>) => void
     onKeyDownCallback?: (e: KeyboardEvent<HTMLInputElement>) => void
     error?: string | null
-    onBlurCallback?:() => void
+    onBlurCallback?: () => void
 }
 
-export const Input = (props: InputPropsType) => {
+export const Input = React.memo((props: InputPropsType) => {
 
-    const oncChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        if (props.onChangeCallback) {
-            props.onChangeCallback(e)
+        const oncChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            if (props.onChangeCallback) {
+                props.onChangeCallback(e)
+            }
         }
-    }
-    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (props.onKeyDownCallback) {
-            props.onKeyDownCallback(e);
+        const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+            if (props.onKeyDownCallback) {
+                props.onKeyDownCallback(e);
+            }
         }
-    }
 
-    const onBlurHandler = () => {
-        if (props.onBlurCallback) {
-            props.onBlurCallback()
+        const onBlurHandler = () => {
+            if (props.onBlurCallback) {
+                props.onBlurCallback()
+            }
         }
-    }
 
-    return (
-        <input
-            className={props.error ? 'error' : ''}
-            value={props.value}
-            onKeyDown={onKeyDownHandler}
-            onChange={oncChangeHandler}
-            onBlur={onBlurHandler}
-            autoFocus
-        />
-    );
-};
+        return (
+            <input
+                className={props.error ? 'error' : ''}
+                value={props.value}
+                onKeyDown={onKeyDownHandler}
+                onChange={oncChangeHandler}
+                onBlur={onBlurHandler}
+                autoFocus
+            />
+        );
+    }
+)
