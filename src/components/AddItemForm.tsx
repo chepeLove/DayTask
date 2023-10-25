@@ -12,7 +12,7 @@ export const AddItemForm:React.FC<AddItemFormType> = React.memo(({addItem}) => {
     const [error, setError] = useState<string | null>(null)
 
     const isAddTaskPossible = !title
-    const addNewItem = () => {
+    const addNewItem = useCallback(() => {
 
         if (title.trim()) {
             addItem(title.trim())
@@ -22,7 +22,7 @@ export const AddItemForm:React.FC<AddItemFormType> = React.memo(({addItem}) => {
 
         setTitle('')
 
-    }
+    },[setError,setTitle])
 
     const onChangeSetValueHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
