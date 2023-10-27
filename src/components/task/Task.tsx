@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import {CheckBox} from "../CheckBox";
 import {Button} from "../Button";
-import {EditableSpan} from "../EditableSpan";
+import {EditableSpan} from "../editableSpan/EditableSpan";
 import {TaskType} from "../../reducers/tasks-reducer";
 import {useTask} from "./hooks/useTask";
 

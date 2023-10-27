@@ -2,7 +2,7 @@ import React from 'react';
 import {Task} from '../task/Task';
 import {Button} from "../Button";
 import {AddItemForm} from "../addItemForm/AddItemForm";
-import {EditableSpan} from "../EditableSpan";
+import {EditableSpan} from "../editableSpan/EditableSpan";
 import {TaskType} from "../../reducers/tasks-reducer";
 import {TodolistType} from "../../reducers/todolists-reducer";
 import {useTodolist} from "./hooks/useTodolist";
