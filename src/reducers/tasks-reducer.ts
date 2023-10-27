@@ -18,7 +18,7 @@ type GeneralACType = AddTaskACType | RemoveTaskACType
 
 const initialState:TasksStateType = {}
 
-export const TasksReducer = (state= initialState, action:GeneralACType) => {
+export const TasksReducer = (state= initialState, action:GeneralACType):TasksStateType => {
     switch (action.type){
         case 'ADD-TASK':{
             const newTask: TaskType = {

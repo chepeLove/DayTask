@@ -22,11 +22,11 @@ export const AddItemForm:React.FC<AddItemFormType> = React.memo(({addItem}) => {
 
         setTitle('')
 
-    },[setError,setTitle])
+    },[title])
 
     const onChangeSetValueHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
-    },[setTitle])
+    },[title])
 
         const onKeyDownSetValueHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         error && setError(null)

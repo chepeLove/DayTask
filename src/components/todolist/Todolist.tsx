@@ -1,18 +1,13 @@
 import React, {useCallback} from 'react';
-import {Task} from './Task';
-import {Button} from "./Button";
-import {AddItemForm} from "./AddItemForm";
-import {EditableSpan} from "./EditableSpan";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from "../reducers/tasks-reducer";
-import {
-    changeFilterAC,
-    changeTitleTodolistAC,
-    FilterValuesType,
-    removeTodolistAC,
-    TodolistType
-} from "../reducers/todolists-reducer";
+import {Task} from '../Task';
+import {Button} from "../Button";
+import {AddItemForm} from "../AddItemForm";
+import {EditableSpan} from "../EditableSpan";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from "../../reducers/tasks-reducer";
+import {FilterValuesType, TodolistType} from "../../reducers/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../store/store";
+import {AppRootStateType} from "../../store/store";
+import {useTodolist} from "./hooks/useTodolist";
 
 
 type PropsType = {
@@ -23,17 +18,10 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
 
         const {todolistId, todolistTitle, filter} = todolist
 
+        const {removeTodolist,changeTitleTodolist,changeFilterTodolist} = useTodolist()
+
         const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[todolistId])
         const dispatch = useDispatch()
-
-        const removeTodolist = useCallback(() => {
-            let action = removeTodolistAC(todolistId)
-            dispatch(action)
-        }, [dispatch,todolistId])
-
-        const changeTitleTodolist = useCallback(() => {
-            dispatch(changeTitleTodolistAC(todolistId, todolistTitle))
-        }, [dispatch,todolistTitle,todolistId])
 
         const removeTaskCallbackHandler = useCallback((id: string) => {
             dispatch(removeTaskAC(todolistId, id))
@@ -80,9 +68,9 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
 
         return <div className="todolist">
             <div>
-                <Button name={'X'} callBackButton={removeTodolist}/>
+                <Button name={'X'} callBackButton={()=>removeTodolist(todolistId)}/>
                 <h3>
-                    <EditableSpan value={todolistTitle} onChangeTitleCallback={changeTitleTodolist}/>
+                    <EditableSpan value={todolistTitle} onChangeTitleCallback={()=>changeTitleTodolist(todolistId,todolistTitle)}/>
                 </h3>
             </div>
             <div>
@@ -92,15 +80,15 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
             <div>
                 <Button className={filter === 'all' ? 'btn-filter-active' : 'btn-filter'}
                         name={'All'}
-                        callBackButton={() => dispatch(changeFilterAC(todolistId, 'all'))}
+                        callBackButton={() => changeFilterTodolist(todolistId,'all')}
                 />
                 <Button className={filter === 'active' ? 'btn-filter-active' : 'btn-filter'}
                         name={'Active'}
-                        callBackButton={() => dispatch(changeFilterAC(todolistId, 'active'))}
+                        callBackButton={() => changeFilterTodolist(todolistId,'active')}
                 />
                 <Button className={filter === 'completed' ? 'btn-filter-active' : 'btn-filter'}
                         name={'Completed'}
-                        callBackButton={() => dispatch(changeFilterAC(todolistId, 'completed'))}
+                        callBackButton={() => changeFilterTodolist(todolistId,'completed')}
                 />
             </div>
         </div>
