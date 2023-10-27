@@ -1,13 +1,12 @@
-import React, {useCallback} from 'react';
-import {Task} from '../Task';
+import React from 'react';
+import {Task} from '../task/Task';
 import {Button} from "../Button";
 import {AddItemForm} from "../AddItemForm";
 import {EditableSpan} from "../EditableSpan";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from "../../reducers/tasks-reducer";
-import {FilterValuesType, TodolistType} from "../../reducers/todolists-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../store/store";
+import {TaskType} from "../../reducers/tasks-reducer";
+import {TodolistType} from "../../reducers/todolists-reducer";
 import {useTodolist} from "./hooks/useTodolist";
+import {useTask} from "../task/hooks/useTask";
 
 
 type PropsType = {
@@ -20,32 +19,7 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
 
         const {removeTodolist,changeTitleTodolist,changeFilterTodolist} = useTodolist()
 
-        const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[todolistId])
-        const dispatch = useDispatch()
-
-        const removeTaskCallbackHandler = useCallback((id: string) => {
-            dispatch(removeTaskAC(todolistId, id))
-        }, [dispatch,todolistId])
-
-        const changeTaskStatusCallbackHandler = useCallback((isDone: boolean, id: string) => {
-            dispatch(changeTaskStatusAC(todolistId, id, isDone))
-        }, [dispatch,todolistId])
-
-        const changeTitleTaskCallbackHandler = useCallback((newTitle: string, id: string) => {
-            dispatch(changeTaskTitleAC(todolistId, id, newTitle))
-        }, [dispatch,todolistId])
-
-
-        const getTaskForRender = (tasks: TaskType[], filter: FilterValuesType) => {
-            switch (filter) {
-                case 'active':
-                    return tasks.filter(t => !t.isDone)
-                case 'completed':
-                    return tasks.filter(t => t.isDone)
-                default:
-                    return tasks
-            }
-        }
+        const {tasks,getTaskForRender,addTask}=useTask(todolistId)
 
         const tasksForTodolist: TaskType[] = getTaskForRender(tasks, filter)
 
@@ -56,10 +30,8 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
                         return (
                             <Task
                                 key={task.id}
+                                todolistId = {todolistId}
                                 {...task}
-                                removeTask={() => removeTaskCallbackHandler(task.id)}
-                                changeTaskStatus={(isDone) => changeTaskStatusCallbackHandler(isDone, task.id)}
-                                changeTitleCallback={(newTitle) => changeTitleTaskCallbackHandler(newTitle, task.id)}
                             />
                         )
                     })}
@@ -74,7 +46,7 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
                 </h3>
             </div>
             <div>
-                <AddItemForm addItem={(title) => dispatch(addTaskAC(todolistId, title))}/>
+                <AddItemForm addItem={(title) =>addTask(title)}/>
             </div>
             {tasksList}
             <div>

@@ -3,7 +3,7 @@ import {Input} from "./Input";
 import {Button} from "./Button";
 
 type AddItemFormType = {
-    addItem:(title:string)=>void
+    addItem:(taskTitle:string)=>void
 }
 export const AddItemForm:React.FC<AddItemFormType> = React.memo(({addItem}) => {
 
