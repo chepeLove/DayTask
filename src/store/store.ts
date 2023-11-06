@@ -1,6 +1,7 @@
-import {combineReducers, legacy_createStore as createStore,compose} from "redux";
-import {TodolistsReducer} from "../reducers/todolists-reducer";
+import {combineReducers, legacy_createStore as createStore, compose, applyMiddleware, AnyAction} from "redux";
+import {TodolistsReducer, TodolstsActionsType} from "../reducers/todolists-reducer";
 import {TasksReducer} from "../reducers/tasks-reducer";
+import thunk, {ThunkAction, ThunkDispatch} from "redux-thunk";
 
 declare global {
     interface Window {
@@ -16,7 +17,18 @@ const RootReducer = combineReducers({
 
 export type AppRootStateType = ReturnType<typeof RootReducer>
 
-export const store = createStore(RootReducer,composeEnhancers())
+export type AppActionsType = TodolstsActionsType
+
+export type AppDispatch = ThunkDispatch<AppRootStateType, unknown,AnyAction> //это когда санка вызывает санку
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+    ReturnType,
+    AppRootStateType,
+    unknown,
+    AnyAction
+>
+
+export const store = createStore(RootReducer,applyMiddleware(thunk))
 
 // @ts-ignore
 window.store = store;
