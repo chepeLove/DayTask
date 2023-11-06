@@ -7,7 +7,7 @@ export const useEditableSpan = (value: string, onChangeTitleCallback: (newTitle:
 
     const changeEditMode = () => {
         setEditMode(!editMode)
-        setTitle(value)
+        setTitle(title)
     }
     const onBlur = () => {
         setEditMode(!editMode)

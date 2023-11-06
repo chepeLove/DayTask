@@ -13,7 +13,7 @@ export const EditableSpan: React.FC<EditableSpanType> = React.memo(({value, onCh
         return (
             editMode
                 ? <Input value={title} onBlurCallback={onBlur} onChangeCallback={onChange}/>
-                : <span onDoubleClick={changeEditMode}>{value}</span>
+                : <span onDoubleClick={changeEditMode}>{title}</span>
         );
     }
 )

@@ -4,45 +4,46 @@ import {Button} from "../Button";
 import {AddItemForm} from "../addItemForm/AddItemForm";
 import {EditableSpan} from "../editableSpan/EditableSpan";
 import {TaskType} from "../../reducers/tasks-reducer";
-import {TodolistType} from "../../reducers/todolists-reducer";
+import {TodolistDomainType} from "../../reducers/todolists-reducer";
 import {useTodolist} from "./hooks/useTodolist";
 import {useTask} from "../task/hooks/useTask";
 
 
 type PropsType = {
-    todolist: TodolistType
+    todolist: TodolistDomainType
 }
 
 export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
 
-        const {todolistId, todolistTitle, filter} = todolist
+        const {id, title, filter} = todolist
 
         const {removeTodolist,changeTitleTodolist,changeFilterTodolist} = useTodolist()
 
-        const {tasks,getTaskForRender,addTask}=useTask(todolistId)
+        const {tasks,getTaskForRender,addTask}=useTask(id)
 
         const tasksForTodolist: TaskType[] = getTaskForRender(tasks, filter)
 
         const tasksList: JSX.Element =
-            tasks.length
-                ? <ul>
-                    {tasksForTodolist.map(task => {
+            // tasks.length ?
+                <ul>
+                    {tasksForTodolist?.map(task => {
                         return (
                             <Task
                                 key={task.id}
-                                todolistId = {todolistId}
+                                todolistId = {id}
                                 {...task}
                             />
                         )
                     })}
                 </ul>
-                : <span>Your task list is empty</span>
+                // :
+    // <span>Your task list is empty</span>
 
         return <div className="todolist">
             <div>
-                <Button name={'X'} callBackButton={()=>removeTodolist(todolistId)}/>
+                <Button name={'X'} callBackButton={()=>removeTodolist(id)}/>
                 <h3>
-                    <EditableSpan value={todolistTitle} onChangeTitleCallback={()=>changeTitleTodolist(todolistId,todolistTitle)}/>
+                    <EditableSpan value={title} onChangeTitleCallback={(title)=>changeTitleTodolist(id,title)}/>
                 </h3>
             </div>
             <div>
@@ -52,15 +53,15 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
             <div>
                 <Button className={filter === 'all' ? 'btn-filter-active' : 'btn-filter'}
                         name={'All'}
-                        callBackButton={() => changeFilterTodolist(todolistId,'all')}
+                        callBackButton={() => changeFilterTodolist(id,'all')}
                 />
                 <Button className={filter === 'active' ? 'btn-filter-active' : 'btn-filter'}
                         name={'Active'}
-                        callBackButton={() => changeFilterTodolist(todolistId,'active')}
+                        callBackButton={() => changeFilterTodolist(id,'active')}
                 />
                 <Button className={filter === 'completed' ? 'btn-filter-active' : 'btn-filter'}
                         name={'Completed'}
-                        callBackButton={() => changeFilterTodolist(todolistId,'completed')}
+                        callBackButton={() => changeFilterTodolist(id,'completed')}
                 />
             </div>
         </div>

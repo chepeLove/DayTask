@@ -12,7 +12,7 @@ function App() {
     const todolistComponents: JSX.Element[] = todolist.map(todolist => {
         return (
             <Todolist
-                key={todolist.todolistId}
+                key={todolist.id}
                 todolist={todolist}
             />
         );
