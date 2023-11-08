@@ -157,6 +157,7 @@ export const deleteTaskTC = (todolistId:string,taskId:string) => async (dispatch
 }
 
 export const updateTaskTC = (todolistId:string, taskId:string, domainModel:UpdateDomainTaskModelType) => async (dispatch:Dispatch, getState:()=>AppRootStateType)=> {
+
     const task = getState().tasks[todolistId].find(task => task.id === taskId)
 
     if(!task){
@@ -176,7 +177,7 @@ export const updateTaskTC = (todolistId:string, taskId:string, domainModel:Updat
 
     try{
         const result = await  taskAPI.updateTask(todolistId,taskId,apiModel)
-        dispatch(updateTaskAC(todolistId,taskId,apiModel))
+        dispatch(updateTaskAC(todolistId,taskId,domainModel))
     }
     catch (e) {
         console.log(e)
