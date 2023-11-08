@@ -3,10 +3,10 @@ import {Task} from '../task/Task';
 import {Button} from "../Button";
 import {AddItemForm} from "../addItemForm/AddItemForm";
 import {EditableSpan} from "../editableSpan/EditableSpan";
-import {TaskType} from "../../reducers/tasks-reducer";
 import {TodolistDomainType} from "../../reducers/todolists-reducer";
 import {useTodolist} from "./hooks/useTodolist";
 import {useTask} from "../task/hooks/useTask";
+import {TaskType} from "../../api/api";
 
 
 type PropsType = {

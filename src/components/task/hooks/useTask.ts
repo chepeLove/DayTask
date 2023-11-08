@@ -1,48 +1,50 @@
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../../store/store";
 import {
-    addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
-    TaskType,
+     updateTaskTC,
+    createTaskTC, deleteTaskTC,
+    getTasksTC,
 } from "../../../reducers/tasks-reducer";
-import {useCallback} from "react";
+import {useCallback, useEffect} from "react";
 import {FilterValuesType} from "../../../reducers/todolists-reducer";
+import {TasksStatuses, TaskType} from "../../../api/api";
+import {useAppDispatch, useAppSelector} from "../../../store/hooks/hooks";
 
 export const useTask = (todolistId:string) => {
 
-    const tasks = useSelector<AppRootStateType,TaskType[]>(state => state.tasks[todolistId])
-    const dispatch = useDispatch()
+    const tasks = useAppSelector<TaskType[]>(state => state.tasks[todolistId])
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(getTasksTC(todolistId))
+    }, []);
 
     const addTask= useCallback((taskTitle:string)=>{
-        dispatch(addTaskAC(todolistId, taskTitle))
+        dispatch(createTaskTC(todolistId, taskTitle))
     },[dispatch])
 
     const removeTask = useCallback((id: string) => {
-        dispatch(removeTaskAC(todolistId, id))
+        dispatch(deleteTaskTC(todolistId, id))
     }, [dispatch])
 
-    const changeTaskStatus = useCallback((isDone: boolean, id: string) => {
-        dispatch(changeTaskStatusAC(todolistId, id, isDone))
+    const changeTaskStatus = useCallback((status: TasksStatuses, id: string) => {
+        dispatch(updateTaskTC(todolistId, id, {status}))
     }, [dispatch])
 
-    const changeTitleTask = useCallback((newTitle: string, id: string) => {
-        dispatch(changeTaskTitleAC(todolistId, id, newTitle))
+    const changeTitleTask = useCallback((title: string, id: string) => {
+        dispatch(updateTaskTC(todolistId, id, {title}))
     }, [dispatch])
 
     const getTaskForRender = (tasks: TaskType[], filter: FilterValuesType) => {
         switch (filter) {
             case 'active':
-                return tasks.filter(t => !t.isDone)
+                return tasks.filter(task => task.status === TasksStatuses.New)
             case 'completed':
-                return tasks.filter(t => t.isDone)
+                return tasks.filter(task => task.status === TasksStatuses.Completed)
             default:
                 return tasks
         }
     }
 
-    return{
+    return {
         tasks,
         removeTask,
         changeTaskStatus,

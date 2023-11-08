@@ -1,11 +1,10 @@
 import {
-    addTodolistAC, changeFilterAC,
-    changeTitleTodolistAC, createTodolistTC, deleteTodolistTC, FilterValuesType, getTodolistTC,
-    removeTodolistAC,
+     changeFilterAC,
+     createTodolistTC, deleteTodolistTC, FilterValuesType, getTodolistTC,
     TodolistDomainType, updateTodolistTitleTC
 } from "../../../reducers/todolists-reducer";
 import {useCallback, useEffect} from "react";
-import {useAppDispatch, useAppSelector} from "../../../hooks/hooks";
+import {useAppDispatch, useAppSelector} from "../../../store/hooks/hooks";
 
 export const useTodolist = () => {
 
