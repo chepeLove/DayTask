@@ -1,6 +1,5 @@
 import {AddTodolistACType, RemoveTodolistACType} from "./todolists-reducer";
 import {taskAPI, TaskPriorities, TasksStatuses, TaskType, UpdateTaskType} from "../api/api";
-import {v1} from "uuid";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "../store/store";
 
@@ -22,20 +21,7 @@ export const TasksReducer = (state= initialState, action:GeneralACType):TasksSta
             return {...state,[action.payload.todolistId]:action.payload.tasks}
         }
         case 'ADD-TASK':{
-            const newTask: TaskType = {
-                description: '',
-                title: action.payload.taskTitle,
-                status: TasksStatuses.New,
-                priority: TaskPriorities.Low,
-                startDate: '',
-                deadline: '',
-                id: v1(),
-                todoListId: action.payload.todolistId,
-                order: 0,
-                addedDate: ''
-
-            }
-            return {...state, [action.payload.todolistId]: [newTask, ...state[action.payload.todolistId]]}
+            return {...state, [action.payload.todolistId]: [action.payload.task, ...state[action.payload.todolistId]]}
         }
         case 'REMOVE-TASK':{
             return {...state,[action.payload.todolistId]:state[action.payload.todolistId]
@@ -59,12 +45,12 @@ export const TasksReducer = (state= initialState, action:GeneralACType):TasksSta
 }
 
 type AddTaskACType = ReturnType<typeof addTaskAC>
-export const addTaskAC = (todolistId: string, taskTitle: string) => {
+export const addTaskAC = (todolistId: string, task: TaskType) => {
     return {
         type:'ADD-TASK' as const,
         payload:{
             todolistId,
-            taskTitle
+            task
         }
     }
 }
@@ -131,7 +117,7 @@ export const getTasksTC = (todolistId:string) => async (dispatch:Dispatch)=> {
 export const createTaskTC = (todolistId:string,title:string) => async (dispatch:Dispatch)=> {
     try{
         const result = await  taskAPI.createTask(todolistId,title)
-        dispatch(addTaskAC(todolistId,result.data.data.item.title))
+        dispatch(addTaskAC(todolistId,result.data.data.item))
     }
     catch (e) {
         console.log(e)
