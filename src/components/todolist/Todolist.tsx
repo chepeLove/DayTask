@@ -24,7 +24,7 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
         const tasksForTodolist: TaskType[] = getTaskForRender(tasks, filter)
 
         const tasksList: JSX.Element =
-            // tasks.length ?
+            tasks.length ?
                 <ul>
                     {tasksForTodolist?.map(task => {
                         return (
@@ -36,8 +36,8 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
                         )
                     })}
                 </ul>
-                // :
-    // <span>Your task list is empty</span>
+                :
+    <span>Your task list is empty</span>
 
         return <div className="todolist">
             <div>

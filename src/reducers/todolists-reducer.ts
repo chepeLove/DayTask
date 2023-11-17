@@ -9,13 +9,13 @@ export type TodolistDomainType = TodolistType & {
 }
 
 export type TodolstsActionsType = RemoveTodolistACType | ChangeFilterAC | AddTodolistACType
-    | ChangeTitleTodolistACType | GetTodolistsACType
+    | ChangeTitleTodolistACType | SetTodolistsACType
 
 const initialState:TodolistDomainType[] = []
 
 export const TodolistsReducer = (state = initialState, action:TodolstsActionsType) => {
     switch (action.type){
-        case 'GET-TODOLISTS':{
+        case 'SET-TODOLISTS':{
             return action.payload.todolists.map((el)=> ({...el,filter:'all'}))
         }
         case 'REMOVE-TODOLIST':{
@@ -88,20 +88,20 @@ export const changeTitleTodolistAC = (todolistId:string,todolistTitle:string) =>
     }
 }
 
-type GetTodolistsACType = ReturnType<typeof getTodolistsAC>
-const getTodolistsAC = (todolists: TodolistType[]) => {
+export type SetTodolistsACType = ReturnType<typeof setTodolistsAC>
+export const setTodolistsAC = (todolists: TodolistType[]) => {
     return {
-        type: "GET-TODOLISTS" as const,
+        type: "SET-TODOLISTS" as const,
         payload:{
             todolists
         }
     }
 }
 
-export const getTodolistTC = () => async (dispatch:Dispatch)=> {
+export const setTodolistTC = () => async (dispatch:Dispatch)=> {
     try{
         const result = await  todolistAPI.getTodolists()
-        dispatch(getTodolistsAC(result.data))
+        dispatch(setTodolistsAC(result.data))
     }
     catch (e) {
         console.log(e)
