@@ -29,11 +29,10 @@ export const TasksReducer = (state= initialState, action:GeneralACType):TasksSta
             return rest
         }
         case 'SET-TODOLISTS':{
-            const copyState = {...state}
-            action.payload.todolists.forEach(tl=>{
-                copyState[tl.id]=[]
-            })
-            return copyState
+             return action.payload.todolists.reduce((copyState,el)=>{
+                copyState[el.id]=[]
+                return  copyState
+            },{...state})
         }
         default:{
             return state
