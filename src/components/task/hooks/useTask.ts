@@ -1,7 +1,7 @@
 import {
      updateTaskTC,
     createTaskTC, deleteTaskTC,
-    getTasksTC,
+    setTasksTC,
 } from "../../../reducers/tasks-reducer";
 import {useCallback, useEffect} from "react";
 import {FilterValuesType} from "../../../reducers/todolists-reducer";
@@ -14,7 +14,7 @@ export const useTask = (todolistId:string) => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(getTasksTC(todolistId))
+        dispatch(setTasksTC(todolistId))
     }, []);
 
     const addTask= useCallback((taskTitle:string)=>{

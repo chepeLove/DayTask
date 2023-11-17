@@ -1,6 +1,6 @@
 import {
      changeFilterAC,
-     createTodolistTC, deleteTodolistTC, FilterValuesType, getTodolistTC,
+     createTodolistTC, deleteTodolistTC, FilterValuesType, setTodolistTC,
     TodolistDomainType, updateTodolistTitleTC
 } from "../../../reducers/todolists-reducer";
 import {useCallback, useEffect} from "react";
@@ -12,7 +12,7 @@ export const useTodolist = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(getTodolistTC())
+        dispatch(setTodolistTC())
     }, []);
 
 
