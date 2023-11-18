@@ -2,6 +2,7 @@ import {AddTodolistACType, RemoveTodolistACType, SetTodolistsACType} from "./tod
 import {taskAPI, TaskPriorities, TasksStatuses, TaskType, UpdateTaskType} from "../api/api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "../store/store";
+import {setAppErrorAC, setAppStatusAC} from "./app-reducer";
 
 const initialState:TasksStateType = {}
 
@@ -53,8 +54,10 @@ export const setTasksAC = (todolistId:string,tasks: TaskType[]) =>
 //Thunks
 export const setTasksTC = (todolistId:string) => async (dispatch:Dispatch)=> {
     try{
+        dispatch(setAppStatusAC('loading'))
         const result = await  taskAPI.getTasks(todolistId)
         dispatch(setTasksAC(todolistId,result.data.items))
+        dispatch(setAppStatusAC('succeeded'))
     }
     catch (e) {
         console.log(e)
@@ -62,8 +65,18 @@ export const setTasksTC = (todolistId:string) => async (dispatch:Dispatch)=> {
 }
 export const createTaskTC = (todolistId:string,title:string) => async (dispatch:Dispatch)=> {
     try{
+        dispatch(setAppStatusAC('loading'))
         const result = await  taskAPI.createTask(todolistId,title)
-        dispatch(addTaskAC(todolistId,result.data.data.item))
+        if(result.data.resultCode === 0){
+            dispatch(addTaskAC(todolistId,result.data.data.item))
+        }else {
+            if(result.data.messages.length){
+                dispatch(setAppErrorAC(result.data.messages[0]))
+            }else {
+                dispatch(setAppErrorAC('Some error occurred'))
+            }
+        }
+        dispatch(setAppStatusAC('succeeded'))
     }
     catch (e) {
         console.log(e)
@@ -71,8 +84,10 @@ export const createTaskTC = (todolistId:string,title:string) => async (dispatch:
 }
 export const deleteTaskTC = (todolistId:string,taskId:string) => async (dispatch:Dispatch)=> {
     try{
+        dispatch(setAppStatusAC('loading'))
         const result = await  taskAPI.deleteTask(todolistId,taskId)
         dispatch(removeTaskAC(todolistId,taskId))
+        dispatch(setAppStatusAC('succeeded'))
     }
     catch (e) {
         console.log(e)
@@ -99,8 +114,10 @@ export const updateTaskTC = (todolistId:string, taskId:string, domainModel:Updat
     }
 
     try{
+        dispatch(setAppStatusAC('loading'))
         const result = await  taskAPI.updateTask(todolistId,taskId,apiModel)
         dispatch(updateTaskAC(todolistId,taskId,domainModel))
+        dispatch(setAppStatusAC('succeeded'))
     }
     catch (e) {
         console.log(e)
