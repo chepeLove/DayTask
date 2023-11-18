@@ -1,0 +1,31 @@
+
+.snackbarContainer {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff0202;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    animation: snackbarAnimation 5s ease-in-out forwards;
+}
+
+
+@keyframes snackbarAnimation {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100%);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-100%);
+    }
+}
