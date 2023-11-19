@@ -6,6 +6,7 @@ type InputPropsType = {
     onKeyDownCallback?: (e: KeyboardEvent<HTMLInputElement>) => void
     error?: string | null
     onBlurCallback?: () => void
+    disabled?:boolean
 }
 
 export const Input = React.memo((props: InputPropsType) => {
@@ -29,6 +30,7 @@ export const Input = React.memo((props: InputPropsType) => {
 
         return (
             <input
+                disabled={props.disabled}
                 className={props.error ? 'error' : ''}
                 value={props.value}
                 onKeyDown={onKeyDownHandler}

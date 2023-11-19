@@ -30,7 +30,7 @@ function App() {
         <>
             {status === 'loading' && <LinearProgress/>}
             <div className="App">
-                <AddItemForm addItem={addTodolist}/>
+                <AddItemForm addItem={addTodolist} disabled={status==='loading'}/>
                 {todolistComponents}
             </div>
             {error && <ErrorSnackbar/>}</>

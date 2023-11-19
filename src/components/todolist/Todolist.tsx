@@ -19,6 +19,7 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
 
         const {removeTodolist,changeTitleTodolist,changeFilterTodolist} = useTodolist()
 
+
         const {tasks,getTaskForRender,addTask}=useTask(id)
 
         const tasksForTodolist: TaskType[] = getTaskForRender(tasks, filter)
@@ -47,7 +48,7 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
                 </h3>
             </div>
             <div>
-                <AddItemForm addItem={(title) =>addTask(title)}/>
+                <AddItemForm addItem={(title) =>addTask(title)} disabled={todolist.entityStatus==='loading'}/>
             </div>
             {tasksList}
             <div>

@@ -1,6 +1,7 @@
 import {ChangeEvent, KeyboardEvent, useCallback, useState} from "react";
 
-export const useAddItemForm = (onAddItem:(taskTitle:string)=>void ) => {
+
+export const useAddItemForm = (onAddItem:(taskTitle:string)=>void) => {
     const [title, setTitle] = useState('')
 
     const [error, setError] = useState<string | null>(null)
