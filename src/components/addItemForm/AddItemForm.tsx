@@ -1,6 +1,6 @@
 import React from 'react';
-import {Input} from "../Input";
-import {Button} from "../Button";
+import {Input} from "../input/Input";
+import {Button} from "../button/Button";
 import {useAddItemForm} from "./hooks/useAddItemForm";
 
 type AddItemFormType = {

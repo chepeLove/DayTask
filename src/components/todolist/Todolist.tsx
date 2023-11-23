@@ -1,6 +1,6 @@
 import React from 'react';
 import {Task} from '../task/Task';
-import {Button} from "../Button";
+import {Button} from "../button/Button";
 import {AddItemForm} from "../addItemForm/AddItemForm";
 import {EditableSpan} from "../editableSpan/EditableSpan";
 import {TodolistDomainType} from "../../reducers/todolists-reducer";

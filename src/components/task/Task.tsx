@@ -1,6 +1,6 @@
 import React, {ChangeEvent} from 'react';
-import {CheckBox} from "../CheckBox";
-import {Button} from "../Button";
+import {CheckBox} from "../checkbox/CheckBox";
+import {Button} from "../button/Button";
 import {EditableSpan} from "../editableSpan/EditableSpan";
 import {useTask} from "./hooks/useTask";
 import {TasksStatuses, TaskType} from "../../api/api";
