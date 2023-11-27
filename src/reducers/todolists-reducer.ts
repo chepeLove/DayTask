@@ -3,6 +3,7 @@ import {RESULT_CODE, todolistAPI, TodolistType} from "../api/api";
 import {RequestStatusType, setAppErrorAC, setAppStatusAC} from "./app-reducer";
 import axios from "axios";
 import {ErrorType, handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {AppThunk} from "../store/store";
 
 const initialState: TodolistDomainType[] = []
 
@@ -62,7 +63,7 @@ export const setTodolistTC = () => async (dispatch: Dispatch) => {
         dispatch(setAppStatusAC('failed'))
     }
 }
-export const createTodolistTC = (title: string) => async (dispatch: Dispatch) => {
+export const createTodolistTC = (title: string):AppThunk => async (dispatch: Dispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
         const result = await todolistAPI.createTodolist(title)
@@ -82,7 +83,7 @@ export const createTodolistTC = (title: string) => async (dispatch: Dispatch) =>
         }
     }
 }
-export const deleteTodolistTC = (id: string) => async (dispatch: Dispatch) => {
+export const deleteTodolistTC = (id: string):AppThunk => async (dispatch: Dispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
         dispatch(changeTodolistEntityStatusAC(id, 'loading'))
@@ -103,7 +104,7 @@ export const deleteTodolistTC = (id: string) => async (dispatch: Dispatch) => {
         }
     }
 }
-export const updateTodolistTitleTC = (id: string, title: string) => async (dispatch: Dispatch) => {
+export const updateTodolistTitleTC = (id: string, title: string):AppThunk => async (dispatch: Dispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
         dispatch(changeTodolistEntityStatusAC(id, 'loading'))
