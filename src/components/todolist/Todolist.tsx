@@ -6,23 +6,22 @@ import {EditableSpan} from "../editableSpan/EditableSpan";
 import {TodolistDomainType} from "../../reducers/todolists-reducer";
 import {useTodolist} from "./hooks/useTodolist";
 import {useTask} from "../task/hooks/useTask";
-import {TaskType} from "../../api/api";
+import {TaskDomainType} from "../../reducers/tasks-reducer";
 
 
-type PropsType = {
+type TodolistPropsType = {
     todolist: TodolistDomainType
 }
 
-export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
+export const Todolist: React.FC<TodolistPropsType> = React.memo(({todolist}) => {
 
-        const {id, title, filter} = todolist
+        const {id, title, filter, entityStatus} = todolist
 
-        const {removeTodolist,changeTitleTodolist,changeFilterTodolist} = useTodolist()
+        const {removeTodolist, changeTitleTodolist, changeFilterTodolist} = useTodolist()
 
+        const {tasks, getTaskForRender, addTask} = useTask(id)
 
-        const {tasks,getTaskForRender,addTask}=useTask(id)
-
-        const tasksForTodolist: TaskType[] = getTaskForRender(tasks, filter)
+        const tasksForTodolist: TaskDomainType[] = getTaskForRender(tasks, filter)
 
         const tasksList: JSX.Element =
             tasks.length ?
@@ -31,38 +30,45 @@ export const Todolist: React.FC<PropsType> = React.memo(({todolist}) => {
                         return (
                             <Task
                                 key={task.id}
-                                todolistId = {id}
+                                todolistId={id}
                                 {...task}
                             />
                         )
                     })}
                 </ul>
                 :
-    <span>Your task list is empty</span>
+                <span>Your task list is empty</span>
 
         return <div className="todolist">
             <div>
-                <Button name={'X'} callBackButton={()=>removeTodolist(id)}/>
+                <Button name={'X'} callBackButton={() => removeTodolist(id)} disabled={entityStatus === 'loading'}/>
                 <h3>
-                    <EditableSpan value={title} onChangeTitleCallback={(title)=>changeTitleTodolist(id,title)}/>
+                    <EditableSpan
+                        value={title}
+                        onChangeTitleCallback={(title) => changeTitleTodolist(id, title)}
+                        disabled={entityStatus === 'loading'}
+                    />
                 </h3>
             </div>
             <div>
-                <AddItemForm addItem={(title) =>addTask(title)} disabled={todolist.entityStatus==='loading'}/>
+                <AddItemForm
+                    addItem={(title) => addTask(title)}
+                    disabled={todolist.entityStatus === 'loading'}
+                />
             </div>
             {tasksList}
             <div>
                 <Button className={filter === 'all' ? 'btn-filter-active' : 'btn-filter'}
                         name={'All'}
-                        callBackButton={() => changeFilterTodolist(id,'all')}
+                        callBackButton={() => changeFilterTodolist(id, 'all')}
                 />
                 <Button className={filter === 'active' ? 'btn-filter-active' : 'btn-filter'}
                         name={'Active'}
-                        callBackButton={() => changeFilterTodolist(id,'active')}
+                        callBackButton={() => changeFilterTodolist(id, 'active')}
                 />
                 <Button className={filter === 'completed' ? 'btn-filter-active' : 'btn-filter'}
                         name={'Completed'}
-                        callBackButton={() => changeFilterTodolist(id,'completed')}
+                        callBackButton={() => changeFilterTodolist(id, 'completed')}
                 />
             </div>
         </div>

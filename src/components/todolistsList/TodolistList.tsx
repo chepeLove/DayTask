@@ -13,22 +13,13 @@ export const TodolistList = () => {
     const status = useAppSelector<RequestStatusType>(state => state.app.status)
     const error = useAppSelector<string | null>(state => state.app.error)
 
-    const todolistComponents: JSX.Element[] = todolist.map(todolist => {
-        return (
-            <>
-                <Todolist
-                    key={todolist.id}
-                    todolist={todolist}
-                />
-            </>
-        );
-    })
+    const todolistComponents = todolist.map(todolist => <Todolist key={todolist.id} todolist={todolist}/>)
 
     return (
         <>
             {status === 'loading' && <LinearProgress/>}
             <div className="App">
-                <AddItemForm addItem={addTodolist} disabled={status==='loading'}/>
+                <AddItemForm addItem={addTodolist} disabled={status === 'loading'}/>
                 {todolistComponents}
             </div>
             {error && <ErrorSnackbar/>}</>

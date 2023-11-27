@@ -1,16 +1,16 @@
 import {
-     updateTaskTC,
+    updateTaskTC,
     createTaskTC, deleteTaskTC,
-    setTasksTC,
+    setTasksTC, TaskDomainType,
 } from "../../../reducers/tasks-reducer";
 import {useCallback, useEffect} from "react";
 import {FilterValuesType} from "../../../reducers/todolists-reducer";
-import {TasksStatuses, TaskType} from "../../../api/api";
+import {TasksStatuses} from "../../../api/api";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks/hooks";
 
 export const useTask = (todolistId:string) => {
 
-    const tasks = useAppSelector<TaskType[]>(state => state.tasks[todolistId])
+    const tasks = useAppSelector<TaskDomainType[]>(state => state.tasks[todolistId])
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export const useTask = (todolistId:string) => {
         dispatch(updateTaskTC(todolistId, id, {title}))
     }, [dispatch])
 
-    const getTaskForRender = (tasks: TaskType[], filter: FilterValuesType) => {
+    const getTaskForRender = (tasks: TaskDomainType[] , filter: FilterValuesType) => {
         switch (filter) {
             case 'active':
                 return tasks.filter(task => task.status === TasksStatuses.New)

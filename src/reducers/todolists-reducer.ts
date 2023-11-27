@@ -1,6 +1,8 @@
 import {Dispatch} from "redux";
-import {todolistAPI, TodolistType} from "../api/api";
+import {RESULT_CODE, todolistAPI, TodolistType} from "../api/api";
 import {RequestStatusType, setAppErrorAC, setAppStatusAC} from "./app-reducer";
+import axios from "axios";
+import {ErrorType, handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 const initialState: TodolistDomainType[] = []
 
@@ -24,9 +26,9 @@ export const TodolistsReducer = (state = initialState, action: TodolstsActionsTy
             return state.map(todolist => todolist.id === action.payload.id ?
                 {...todolist, title: action.payload.title} : todolist)
         }
-        case 'CHANGE-ENTITY-STATUS':{
-            return state.map((todolist)=> todolist.id === action.payload.id ?
-                {...todolist,entityStatus:action.payload.status}:todolist)
+        case 'CHANGE-TODOLIST-ENTITY-STATUS': {
+            return state.map((todolist) => todolist.id === action.payload.id ?
+                {...todolist, entityStatus: action.payload.status} : todolist)
         }
         default:
             return state
@@ -45,8 +47,8 @@ export const changeTitleTodolistAC = (id: string, title: string) =>
     ({type: 'CHANGE-TITLE-TODOLIST', payload: {id, title}} as const)
 export const setTodolistsAC = (todolists: TodolistType[]) =>
     ({type: "SET-TODOLISTS", payload: {todolists}} as const)
-export const changeEntityStatusAC = (id:string,status: RequestStatusType) =>
-    ({type: 'CHANGE-ENTITY-STATUS', payload: {id,status}} as const)
+export const changeTodolistEntityStatusAC = (id: string, status: RequestStatusType) =>
+    ({type: 'CHANGE-TODOLIST-ENTITY-STATUS', payload: {id, status}} as const)
 
 //Thunks
 export const setTodolistTC = () => async (dispatch: Dispatch) => {
@@ -55,7 +57,7 @@ export const setTodolistTC = () => async (dispatch: Dispatch) => {
         const result = await todolistAPI.getTodolists()
         dispatch(setTodolistsAC(result.data))
         dispatch(setAppStatusAC('succeeded'))
-    } catch (error:any) {
+    } catch (error: any) {
         dispatch(setAppErrorAC(error.message))
         dispatch(setAppStatusAC('failed'))
     }
@@ -64,38 +66,64 @@ export const createTodolistTC = (title: string) => async (dispatch: Dispatch) =>
     try {
         dispatch(setAppStatusAC('loading'))
         const result = await todolistAPI.createTodolist(title)
-        dispatch(addTodolistAC(result.data.data.item))
-        dispatch(setAppStatusAC('succeeded'))
-    } catch (error:any) {
-        dispatch(setAppErrorAC(error.message))
-        dispatch(setAppStatusAC('failed'))
+        if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
+            dispatch(addTodolistAC(result.data.data.item))
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            handleServerAppError(result.data, dispatch)
+            dispatch(setAppStatusAC('failed'))
+        }
+    } catch (error) {
+        if (axios.isAxiosError<ErrorType>(error)) {
+            const errorMessage = error.response?.data ? error.response?.data.messages[0] : error.message
+            handleServerNetworkError(dispatch, errorMessage)
+        } else {
+            handleServerNetworkError(dispatch, (error as Error).message)
+        }
     }
 }
 export const deleteTodolistTC = (id: string) => async (dispatch: Dispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
-        dispatch(changeEntityStatusAC(id,'loading'))
+        dispatch(changeTodolistEntityStatusAC(id, 'loading'))
         const result = await todolistAPI.deleteTodolist(id)
-        dispatch(removeTodolistAC(id))
-        dispatch(setAppStatusAC('succeeded'))
-    } catch (error:any) {
-        dispatch(setAppErrorAC(error.message))
-        dispatch(setAppStatusAC('failed'))
-        dispatch(changeEntityStatusAC(id,'failed'))
+        if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
+            dispatch(removeTodolistAC(id))
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            handleServerAppError(result.data, dispatch)
+            dispatch(setAppStatusAC('failed'))
+        }
+    } catch (error) {
+        if (axios.isAxiosError<ErrorType>(error)) {
+            const errorMessage = error.response?.data ? error.response?.data.messages[0] : error.message
+            handleServerNetworkError(dispatch, errorMessage)
+        } else {
+            handleServerNetworkError(dispatch, (error as Error).message)
+        }
     }
 }
 export const updateTodolistTitleTC = (id: string, title: string) => async (dispatch: Dispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
-        dispatch(changeEntityStatusAC(id,'loading'))
+        dispatch(changeTodolistEntityStatusAC(id, 'loading'))
         const result = await todolistAPI.updateTodolistTitle(id, title)
-        dispatch(changeTitleTodolistAC(id, title))
-        dispatch(setAppStatusAC('succeeded'))
-        dispatch(changeEntityStatusAC(id,'succeeded'))
-    } catch (error:any) {
-        dispatch(setAppErrorAC(error.message))
-        dispatch(setAppStatusAC('failed'))
-        dispatch(changeEntityStatusAC(id,'failed'))
+        if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
+            dispatch(changeTitleTodolistAC(id, title))
+            dispatch(setAppStatusAC('succeeded'))
+            dispatch(changeTodolistEntityStatusAC(id, 'succeeded'))
+        } else {
+            handleServerAppError(result.data, dispatch)
+            dispatch(setAppStatusAC('failed'))
+            dispatch(changeTodolistEntityStatusAC(id, 'failed'))
+        }
+    } catch (error) {
+        if (axios.isAxiosError<ErrorType>(error)) {
+            const errorMessage = error.response?.data ? error.response?.data.messages[0] : error.message
+            handleServerNetworkError(dispatch, errorMessage)
+        } else {
+            handleServerNetworkError(dispatch, (error as Error).message)
+        }
     }
 }
 
@@ -120,7 +148,7 @@ type ChangeFilterAC = ReturnType<typeof changeFilterAC>
 export type AddTodolistACType = ReturnType<typeof addTodolistAC>
 type ChangeTitleTodolistACType = ReturnType<typeof changeTitleTodolistAC>
 export type SetTodolistsACType = ReturnType<typeof setTodolistsAC>
-type ChangeEntityStatusACType = ReturnType<typeof changeEntityStatusAC>
+type ChangeEntityStatusACType = ReturnType<typeof changeTodolistEntityStatusAC>
 
 
 
