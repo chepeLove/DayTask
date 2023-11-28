@@ -1,9 +1,10 @@
 import {Dispatch} from "redux";
 import {RESULT_CODE, todolistAPI, TodolistType} from "../api/api";
-import {RequestStatusType, setAppErrorAC, setAppStatusAC} from "./app-reducer";
+import {RequestStatusType,setAppStatusAC} from "./app-reducer";
 import axios from "axios";
 import {ErrorType, handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-import {AppThunk} from "../store/store";
+import {AppDispatch, AppThunk} from "../store/store";
+import {setTasksTC} from "./tasks-reducer";
 
 const initialState: TodolistDomainType[] = []
 
@@ -52,15 +53,22 @@ export const changeTodolistEntityStatusAC = (id: string, status: RequestStatusTy
     ({type: 'CHANGE-TODOLIST-ENTITY-STATUS', payload: {id, status}} as const)
 
 //Thunks
-export const setTodolistTC = ():AppThunk => async (dispatch: Dispatch) => {
+export const setTodolistTC = ():AppThunk => async (dispatch: AppDispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
         const result = await todolistAPI.getTodolists()
         dispatch(setTodolistsAC(result.data))
         dispatch(setAppStatusAC('succeeded'))
-    } catch (error: any) {
-        dispatch(setAppErrorAC(error.message))
-        dispatch(setAppStatusAC('failed'))
+        result.data.forEach((todolist)=> {
+            dispatch(setTasksTC(todolist.id))
+        })
+    } catch (error) {
+        if (axios.isAxiosError<ErrorType>(error)) {
+            const errorMessage = error.response?.data ? error.response?.data.messages[0] : error.message
+            handleServerNetworkError(dispatch, errorMessage)
+        } else {
+            handleServerNetworkError(dispatch, (error as Error).message)
+        }
     }
 }
 export const createTodolistTC = (title: string):AppThunk => async (dispatch: Dispatch) => {

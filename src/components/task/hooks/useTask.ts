@@ -1,9 +1,8 @@
 import {
     updateTaskTC,
-    createTaskTC, deleteTaskTC,
-    setTasksTC, TaskDomainType,
+    createTaskTC, deleteTaskTC, TaskDomainType,
 } from "../../../reducers/tasks-reducer";
-import {useCallback, useEffect} from "react";
+import {useCallback} from "react";
 import {FilterValuesType} from "../../../reducers/todolists-reducer";
 import {TasksStatuses} from "../../../api/api";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks/hooks";
@@ -13,9 +12,6 @@ export const useTask = (todolistId:string) => {
     const tasks = useAppSelector<TaskDomainType[]>(state => state.tasks[todolistId])
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(setTasksTC(todolistId))
-    }, []);
 
     const addTask= useCallback((taskTitle:string)=>{
         dispatch(createTaskTC(todolistId, taskTitle))
