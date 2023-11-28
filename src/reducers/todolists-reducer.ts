@@ -52,7 +52,7 @@ export const changeTodolistEntityStatusAC = (id: string, status: RequestStatusTy
     ({type: 'CHANGE-TODOLIST-ENTITY-STATUS', payload: {id, status}} as const)
 
 //Thunks
-export const setTodolistTC = () => async (dispatch: Dispatch) => {
+export const setTodolistTC = ():AppThunk => async (dispatch: Dispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
         const result = await todolistAPI.getTodolists()

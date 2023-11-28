@@ -2,7 +2,8 @@ import {combineReducers, legacy_createStore as createStore, compose, applyMiddle
 import {TodolistsReducer, TodolstsActionsType} from "../reducers/todolists-reducer";
 import {TasksReducer} from "../reducers/tasks-reducer";
 import thunk, {ThunkAction, ThunkDispatch} from "redux-thunk";
-import {appReducer} from "../reducers/app-reducer";
+import {AppReducer} from "../reducers/app-reducer";
+import {AuthReducer} from "../reducers/auth-reducer";
 
 declare global {
     interface Window {
@@ -14,7 +15,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const RootReducer = combineReducers({
     todolists:TodolistsReducer,
     tasks:TasksReducer,
-    app:appReducer
+    app:AppReducer,
+    auth:AuthReducer
 })
 
 export type AppRootStateType = ReturnType<typeof RootReducer>

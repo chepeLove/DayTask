@@ -10,9 +10,12 @@ export const useTodolist = () => {
 
     const todolist = useAppSelector<TodolistDomainType[]>(state => state.todolists)
     const dispatch = useAppDispatch()
+    const  isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
 
     useEffect(() => {
-        dispatch(setTodolistTC())
+        if(isLoggedIn){
+            dispatch(setTodolistTC())
+        }
     }, []);
 
 

@@ -13,7 +13,7 @@ import axios from "axios";
 
 const initialState: TasksStateType = {}
 
-export const TasksReducer = (state = initialState, action: GeneralACType): TasksStateType => {
+export const TasksReducer = (state = initialState, action: TasksActionsType): TasksStateType => {
     switch (action.type) {
         case 'SET-TASKS': {
             return {...state, [action.payload.todolistId]: action.payload.tasks.map((task) => ({...task, entityStatus: 'idle'}))}
@@ -184,7 +184,7 @@ export type TaskDomainType = TaskType & {
     entityStatus: RequestStatusType
 }
 
-type GeneralACType = AddTaskACType
+type TasksActionsType = AddTaskACType
     | RemoveTaskACType
     | ChangeTaskStatusACType
     | AddTodolistACType

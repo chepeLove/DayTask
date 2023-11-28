@@ -3,9 +3,6 @@ import axios from "axios";
 const instance = axios.create({
     baseURL:`https://social-network.samuraijs.com/api/1.1/`,
     withCredentials:true,
-    headers:{
-        'API-KEY': '80355f25-1716-4bed-9c55-ae7d9e7587da'
-    }
 })
 
 //API
@@ -35,6 +32,18 @@ export const taskAPI = {
     },
     updateTask(todolistId:string,taskId:string,model:UpdateTaskType){
         return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`,model)
+    }
+}
+
+export const authAPI = {
+    login(params:LoginParamsType){
+        return instance.post<ResponseType<{userId?:number}>>('auth/login',params)
+    },
+    logout(){
+        return instance.delete<ResponseType>('auth/login')
+    },
+    me(){
+        return instance.get<ResponseType<{id:number,email:string,login:string}>>('auth/me')
     }
 }
 
@@ -94,3 +103,11 @@ export enum RESULT_CODE {
     ERROR = 1,
     CAPTCHA = 10
 }
+
+export type LoginParamsType = {
+    email:string
+    password:string
+    rememberMe:boolean
+    captcha?:string
+}
+
