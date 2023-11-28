@@ -4,6 +4,7 @@ import {authAPI, LoginParamsType, RESULT_CODE} from "../api/api";
 import {setAppStatusAC} from "./app-reducer";
 import axios from "axios";
 import {ErrorType, handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {clearTodolistsDataAC} from "./todolists-reducer";
 
 const initialState:InitialStateType = {
     isLoggedIn:false
@@ -53,6 +54,7 @@ export const logoutTC = ():AppThunk => async (dispatch:Dispatch) => {
         dispatch(setAppStatusAC('loading'))
         const result = await  authAPI.logout()
         if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
+            dispatch(clearTodolistsDataAC())
             dispatch(setAppStatusAC('succeeded'))
             dispatch(setIsLoggedIn(false))
         }else {

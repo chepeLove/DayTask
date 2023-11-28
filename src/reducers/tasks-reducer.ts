@@ -1,6 +1,6 @@
 import {
     AddTodolistACType,
-    changeTodolistEntityStatusAC,
+    changeTodolistEntityStatusAC, ClearTodolistsDataACType,
     RemoveTodolistACType,
     SetTodolistsACType
 } from "./todolists-reducer";
@@ -50,6 +50,9 @@ export const TasksReducer = (state = initialState, action: TasksActionsType): Ta
         case 'CHANGE-ENTITY-STATUS':{
             return {...state,[action.payload.todolistId]:state[action.payload.todolistId]
                     .map((task)=>task.id === action.payload.taskId ? {...task,entityStatus:action.payload.status}: task)}
+        }
+        case 'CLEAR-TODOLISTS-DATA':{
+            return {}
         }
         default: {
             return state
@@ -192,6 +195,7 @@ type TasksActionsType = AddTaskACType
     | SetTasksAC
     | SetTodolistsACType
     | ChangeTaskEntityStatusACType
+    | ClearTodolistsDataACType
 
 type AddTaskACType = ReturnType<typeof addTaskAC>
 type RemoveTaskACType = ReturnType<typeof removeTaskAC>
