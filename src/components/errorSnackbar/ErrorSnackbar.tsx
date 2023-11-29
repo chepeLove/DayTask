@@ -1,23 +1,20 @@
 import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from "../../store/hooks/hooks";
 import {setAppErrorAC} from "../../reducers/app-reducer";
-import s from './ErrorSnackbar.module.css'
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const ErrorSnackbar = () => {
 
-    const error = useAppSelector<string | null>(state => state.app.error)
+    const errorMessage = useAppSelector(state => state.app.error)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        setTimeout(()=>{
+        if (errorMessage) {
+            toast.error(errorMessage)
             dispatch(setAppErrorAC(null))
-        },5000)
-    }, [error]);
+        }
+    }, [errorMessage]);
 
-
-    return (
-        <div className={s.snackbarContainer}>
-            <span>{error}</span>
-        </div>
-    );
+    return <ToastContainer theme="colored" autoClose={3000} position="bottom-center" />
 };

@@ -15,8 +15,6 @@ function App() {
 
     const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized)
     const dispatch = useAppDispatch()
-    const error = useAppSelector<string | null>(state => state.app.error)
-
 
     useEffect(() => {
         dispatch(initializedAppTC())
@@ -30,7 +28,6 @@ function App() {
         return <Preloader/>
     }
 
-
     return <>
         <Button name={'log out'} callBackButton={logoutHandler}/>
         <Routes>
@@ -39,7 +36,7 @@ function App() {
             <Route path={'/404'} element={<h1>404: PAGE NOT FOUND</h1>}/>
             <Route path={'*'} element={<Navigate to = {'/404'} />}/>
         </Routes>
-        {error && <ErrorSnackbar/>}
+        <ErrorSnackbar/>
       </>
 
 }

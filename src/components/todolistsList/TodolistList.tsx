@@ -5,14 +5,12 @@ import {RequestStatusType} from "../../reducers/app-reducer";
 import {Todolist} from "../todolist/Todolist";
 import {LinearProgress} from "../linearProgress/LinearProgress";
 import {AddItemForm} from "../addItemForm/AddItemForm";
-import {ErrorSnackbar} from "../errorSnackbar/ErrorSnackbar";
 import {Navigate} from "react-router-dom";
 
 export const TodolistList = () => {
 
     const {todolist, addTodolist} = useTodolist()
     const status = useAppSelector<RequestStatusType>(state => state.app.status)
-    const error = useAppSelector<string | null>(state => state.app.error)
     const  isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
 
     if(!isLoggedIn){
@@ -28,6 +26,6 @@ export const TodolistList = () => {
                 <AddItemForm addItem={addTodolist} disabled={status === 'loading'}/>
                 {todolistComponents}
             </div>
-            {error && <ErrorSnackbar/>}</>
+        </>
     );
 };
