@@ -2,6 +2,7 @@ import React from 'react';
 import {Input} from "../input/Input";
 import {Button} from "../button/Button";
 import {useAddItemForm} from "./hooks/useAddItemForm";
+import s from './AddItemForm.module.css'
 
 type AddItemFormType = {
     addItem: (taskTitle: string) => void
@@ -28,7 +29,7 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo(({addItem,disab
                     error={error}
                 />
                 <Button name={'+'} callBackButton={onClickAddTAsk} disabled={isAddTaskPossible || disabled}/>
-                {error && <div className="error-message">{error}</div>}
+                {error && <div className={s.errorMessage}>{error}</div>}
             </div>
         );
     }

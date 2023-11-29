@@ -5,6 +5,7 @@ import {EditableSpan} from "../editableSpan/EditableSpan";
 import {useTask} from "./hooks/useTask";
 import {TasksStatuses} from "../../api/api";
 import {TaskDomainType} from "../../reducers/tasks-reducer";
+import s from './Task.module.css'
 
 
 type TaskPropsType = {
@@ -35,7 +36,7 @@ export const Task: React.FC<TaskPropsType> = React.memo((
         }
 
         return (
-            <li key={id} className={status === TasksStatuses.Completed ? 'task-done' : 'task'}>
+            <li key={id} className={status === TasksStatuses.Completed ? s.taskDone : s.task}>
                 <CheckBox checked={status === TasksStatuses.Completed}
                           onChangeCallback={changeTaskStatusHandler}
                           disabled={entityStatus === 'loading'}

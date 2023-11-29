@@ -6,6 +6,7 @@ import {Todolist} from "../todolist/Todolist";
 import {LinearProgress} from "../linearProgress/LinearProgress";
 import {AddItemForm} from "../addItemForm/AddItemForm";
 import {Navigate} from "react-router-dom";
+import s from './TodolistsList.module.css'
 
 export const TodolistList = () => {
 
@@ -22,7 +23,7 @@ export const TodolistList = () => {
     return (
         <>
             {status === 'loading' && <LinearProgress/>}
-            <div className="App">
+            <div className={s.list}>
                 <AddItemForm addItem={addTodolist} disabled={status === 'loading'}/>
                 {todolistComponents}
             </div>

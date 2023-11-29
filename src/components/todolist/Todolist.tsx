@@ -7,6 +7,7 @@ import {TodolistDomainType} from "../../reducers/todolists-reducer";
 import {useTodolist} from "./hooks/useTodolist";
 import {useTask} from "../task/hooks/useTask";
 import {TaskDomainType} from "../../reducers/tasks-reducer";
+import s from './Todolist.module.css'
 
 
 type TodolistPropsType = {
@@ -39,7 +40,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({todolist}) => 
                 :
                 <span>Your task list is empty</span>
 
-        return <div className="todolist">
+        return <div className={s.todolist}>
             <div>
                 <Button name={'X'} callBackButton={() => removeTodolist(id)} disabled={entityStatus === 'loading'}/>
                 <h3>
@@ -58,15 +59,15 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({todolist}) => 
             </div>
             {tasksList}
             <div>
-                <Button className={filter === 'all' ? 'btn-filter-active' : 'btn-filter'}
+                <Button className={filter === 'all' ? s.buttonTaskFilterActive : s.buttonTaskFilter}
                         name={'All'}
                         callBackButton={() => changeFilterTodolist(id, 'all')}
                 />
-                <Button className={filter === 'active' ? 'btn-filter-active' : 'btn-filter'}
+                <Button className={filter === 'active' ? s.buttonTaskFilterActive  : s.buttonTaskFilter}
                         name={'Active'}
                         callBackButton={() => changeFilterTodolist(id, 'active')}
                 />
-                <Button className={filter === 'completed' ? 'btn-filter-active' : 'btn-filter'}
+                <Button className={filter === 'completed' ? s.buttonTaskFilterActive  : s.buttonTaskFilter}
                         name={'Completed'}
                         callBackButton={() => changeFilterTodolist(id, 'completed')}
                 />

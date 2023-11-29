@@ -1,4 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent} from 'react';
+import s from './Input.module.css'
 
 type InputPropsType = {
     value: string
@@ -31,7 +32,7 @@ export const Input = React.memo((props: InputPropsType) => {
         return (
             <input
                 disabled={props.disabled}
-                className={props.error ? 'error' : ''}
+                className={props.error ? s.error : ''}
                 value={props.value}
                 onKeyDown={onKeyDownHandler}
                 onChange={oncChangeHandler}
