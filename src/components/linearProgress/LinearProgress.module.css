@@ -1,22 +1,33 @@
-.container {
+.linearLoader {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 4px;
-    background-color: #f2f2f2;
+    background-color: #f3f3f3;
+    z-index: 9999;
 }
 
-.loader {
+.linearLoader::before {
+    content: "";
+    position: absolute;
     width: 0;
     height: 100%;
-    background-color: #4caf50;
-    animation: loaderAnimation 2s linear infinite;
+    background-color: #3ec545;
+    animation: loading 2s linear infinite;
 }
 
-@keyframes loaderAnimation {
+@keyframes loading {
     0% {
+        left: 0;
         width: 0;
     }
-    100% {
+    50% {
+        left: 0;
         width: 100%;
+    }
+    100% {
+        left: 100%;
+        width: 0;
     }
 }
