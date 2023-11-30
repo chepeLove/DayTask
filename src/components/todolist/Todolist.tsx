@@ -8,6 +8,9 @@ import {useTodolist} from "./hooks/useTodolist";
 import {useTask} from "../task/hooks/useTask";
 import {TaskDomainType} from "../../reducers/tasks-reducer";
 import s from './Todolist.module.css'
+import {useAppSelector} from "../../store/hooks/hooks";
+import {RequestStatusType} from "../../reducers/app-reducer";
+import {TaskSkeleton} from "../task/taskSkeleton/TaskSkeleton";
 
 
 type TodolistPropsType = {
@@ -22,10 +25,14 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({todolist}) => 
 
         const {tasks, getTaskForRender, addTask} = useTask(id)
 
+         const status = useAppSelector<RequestStatusType>(state => state.app.status)
+
         const tasksForTodolist: TaskDomainType[] = getTaskForRender(tasks, filter)
 
-        const tasksList: JSX.Element =
-            tasks.length ?
+
+
+        const tasksList =
+              tasks.length ?
                 <ul>
                     {tasksForTodolist?.map(task => {
                         return (
@@ -38,7 +45,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({todolist}) => 
                     })}
                 </ul>
                 :
-                <span>Your task list is empty</span>
+                  status != 'loading' &&  <span>Your task list is empty</span>
 
         return <div className={s.todolist}>
             <div>
@@ -57,6 +64,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({todolist}) => 
                     disabled={todolist.entityStatus === 'loading'}
                 />
             </div>
+            {status === 'loading' && tasks.length === 0 && <TaskSkeleton count={3} />}
             {tasksList}
             <div>
                 <Button className={filter === 'all' ? s.buttonTaskFilterActive : s.buttonTaskFilter}

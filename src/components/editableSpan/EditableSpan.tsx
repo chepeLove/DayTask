@@ -14,7 +14,7 @@ export const EditableSpan: React.FC<EditableSpanType> = React.memo(({value, onCh
         return (
             editMode && !disabled
                 ? <Input value={title} onBlurCallback={onBlur} onChangeCallback={onChange}/>
-                : <span onDoubleClick={changeEditMode}>{title}</span>
+                : <span onDoubleClick={changeEditMode}>{value}</span>
         );
     }
 )

@@ -124,6 +124,7 @@ export const updateTodolistTitleTC = (id: string, title: string): AppThunk => as
         dispatch(changeTodolistEntityStatusAC(id, 'loading'))
         const result = await todolistAPI.updateTodolistTitle(id, title)
         if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
+            console.log('POPAL')
             dispatch(changeTitleTodolistAC(id, title))
             dispatch(setAppStatusAC('succeeded'))
             dispatch(changeTodolistEntityStatusAC(id, 'succeeded'))
