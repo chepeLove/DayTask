@@ -35,6 +35,7 @@ export const Task: React.FC<TaskPropsType> = React.memo((
             removeTask(id)
         }
 
+
         return (
             <li key={id} className={status === TasksStatuses.Completed ? s.taskDone : s.task}>
                 <CheckBox checked={status === TasksStatuses.Completed}

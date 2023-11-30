@@ -6,17 +6,13 @@ import { createRoot } from 'react-dom/client';
 import {Provider} from "react-redux";
 import {store} from "./store/store";
 import {BrowserRouter} from "react-router-dom";
-import {SkeletonTheme} from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css'
 
 const container  = document.getElementById('root') as HTMLElement
 const root = createRoot(container);
 root.render(
     <BrowserRouter>
         <Provider store={store}>
-            <SkeletonTheme >
                 <App />
-            </SkeletonTheme>
         </Provider>
     </BrowserRouter>
 );

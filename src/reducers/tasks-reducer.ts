@@ -157,15 +157,14 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
         }
 
         try {
-            dispatch(setAppStatusAC('loading'))
             dispatch(changeTaskEntityStatusAC(todolistId,taskId,"loading"))
             const result = await taskAPI.updateTask(todolistId, taskId, apiModel)
             if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
                 dispatch(updateTaskAC(todolistId, taskId, domainModel))
-                dispatch(setAppStatusAC('succeeded'))
                 dispatch(changeTaskEntityStatusAC(todolistId,taskId,"succeeded"))
             } else {
                 handleServerAppError(result.data, dispatch)
+                dispatch(changeTaskEntityStatusAC(todolistId,taskId,"failed"))
             }
         } catch (error) {
             if (axios.isAxiosError<ErrorType>(error)) {
@@ -174,6 +173,7 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
             } else {
                 handleServerNetworkError(dispatch, (error as Error).message)
             }
+            dispatch(changeTaskEntityStatusAC(todolistId,taskId,"failed"))
         }
     }
 
