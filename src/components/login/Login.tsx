@@ -36,7 +36,14 @@ export const Login = () => {
                 errors.password = 'The password must contain at least one letter'
             } else if (!(/\d/.test(values.password))) {
                 errors.password = 'The password must contain at least one number'
+            }else if (!(/[A-Z]/.test(values.password))) {
+                errors.password = 'The password must contain at least one capital letter'
+            }else if (!(/[a-z]/.test(values.password))) {
+                errors.password = 'The password must contain at least one lowercase letter'
+            }else if (/[^a-zA-Z0-9]/.test(values.password)) {
+                errors.password = 'Password must not contain symbols'
             }
+
             return errors
         },
         onSubmit: values => {
@@ -51,29 +58,37 @@ export const Login = () => {
 
     return (
         <>
+            <label>
+                <p>To log in get registered
+                    <a href={'https://social-network.samuraijs.com/'}
+                       target={'_blank'}> here
+                    </a>
+                </p>
+                <p>or use common test account credentials:</p>
+                <p>Email: free@samuraijs.com</p>
+                <p>Password: free</p>
+            </label>
+
             <form onSubmit={formik.handleSubmit}>
                 <label htmlFor="email">Email:</label>
                 <input id={'email'}
                        type="email"
                        {...formik.getFieldProps('email')}
                 />
-                {formik.touched.email && formik.errors.email ? (
-                    <div style={{color: 'red'}}>{formik.errors.email}</div>) : null}
+                {formik.touched.email && formik.errors.email && <div style={{color: 'red'}}>{formik.errors.email}</div>}
 
                 <label htmlFor="password">Password:</label>
                 <input id={'password'}
                        type="password"
                        {...formik.getFieldProps('password')}
                 />
-                {formik.touched.password && formik.errors.password ? (
-                    <div style={{color: 'red'}}>{formik.errors.password}</div>) : null}
+                {formik.touched.password && formik.errors.password && <div style={{color: 'red'}}>{formik.errors.password}</div>}
 
                 <label htmlFor="rememberMe">
                     <input type="checkbox"
                            id={'rememberMe'}
-                           name={'rememberMe'}
-                           onChange={formik.handleChange}
                            checked={formik.values.rememberMe}
+                           {...formik.getFieldProps('rememberMe')}
                     />
                     <span>remember me</span>
                 </label>

@@ -21,3 +21,6 @@ export const handleServerNetworkError = (dispatch:Dispatch,error:string) =>{
     dispatch(setAppErrorAC(error ? error : 'Some error occurred'))
     dispatch(setAppStatusAC('failed'))
 }
+
+
+

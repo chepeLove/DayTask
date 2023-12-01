@@ -5,19 +5,21 @@ import {Login} from "./components/login/Login";
 import {Routes,Route, Navigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "./store/hooks/hooks";
 import {Preloader} from "./components/preloader/Preloader";
-import {initializedAppTC} from "./reducers/app-reducer";
 import {Button} from "./components/button/Button";
-import {logoutTC} from "./reducers/auth-reducer";
+import {logoutTC, meTC} from "./reducers/auth-reducer";
 import {ErrorSnackbar} from "./components/errorSnackbar/ErrorSnackbar";
+import {RequestStatusType} from "./reducers/app-reducer";
+import {LinearProgress} from "./components/linearProgress/LinearProgress";
 
 
 function App() {
 
     const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized)
+    const status = useAppSelector<RequestStatusType>(state => state.app.status)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(initializedAppTC())
+        dispatch(meTC())
     }, []);
 
     const logoutHandler = useCallback(()=>{
@@ -29,6 +31,7 @@ function App() {
     }
 
     return <>
+        {status === 'loading' && <LinearProgress/>}
         <Button name={'log out'} callBackButton={logoutHandler}/>
         <Routes>
             <Route path={'/login'} element = {<Login/>}/>

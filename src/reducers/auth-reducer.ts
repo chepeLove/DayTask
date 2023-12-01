@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {AppThunk} from "../store/store";
 import {authAPI, LoginParamsType, RESULT_CODE} from "../api/api";
-import {setAppStatusAC} from "./app-reducer";
+import {setAppInitializedAC, setAppStatusAC} from "./app-reducer";
 import axios from "axios";
 import {ErrorType, handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {clearTodolistsDataAC} from "./todolists-reducer";
@@ -46,6 +46,28 @@ export const loginTC = (loginParams: LoginParamsType): AppThunk => async (dispat
         } else {
             handleServerNetworkError(dispatch, (error as Error).message)
         }
+    }
+}
+
+export const meTC = ():AppThunk => async (dispatch:Dispatch) => {
+    try {
+        dispatch(setAppStatusAC('loading'))
+        const result = await authAPI.me()
+        if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
+            dispatch(setIsLoggedIn(true))
+            dispatch(setAppStatusAC('succeeded'))
+        }else {
+            handleServerAppError(result.data, dispatch)
+        }
+    } catch (error) {
+        if (axios.isAxiosError<ErrorType>(error)) {
+            const errorMessage = error.response?.data ? error.response?.data.messages[0] : error.message
+            handleServerNetworkError(dispatch, errorMessage)
+        } else {
+            handleServerNetworkError(dispatch, (error as Error).message)
+        }
+    }finally {
+        dispatch(setAppInitializedAC(true))
     }
 }
 

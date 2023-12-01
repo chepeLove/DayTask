@@ -1,5 +1,5 @@
 import {combineReducers, legacy_createStore as createStore, compose, applyMiddleware, AnyAction} from "redux";
-import {TodolistsReducer, TodolstsActionsType} from "../reducers/todolists-reducer";
+import {TodolistsReducer} from "../reducers/todolists-reducer";
 import {TasksReducer} from "../reducers/tasks-reducer";
 import thunk, {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {AppReducer} from "../reducers/app-reducer";
@@ -20,8 +20,6 @@ const RootReducer = combineReducers({
 })
 
 export type AppRootStateType = ReturnType<typeof RootReducer>
-
-export type AppActionsType = TodolstsActionsType
 
 export type AppDispatch = ThunkDispatch<AppRootStateType, unknown,AnyAction> //это когда санка вызывает санку
 

@@ -1,9 +1,3 @@
-import {Dispatch} from "redux";
-import {authAPI, RESULT_CODE} from "../api/api";
-import {ErrorType, handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-import {setIsLoggedIn} from "./auth-reducer";
-import axios from "axios";
-import {AppThunk} from "../store/store";
 
 const initialState:InitialStateType = {
     status: 'idle',
@@ -34,24 +28,7 @@ export const setAppInitializedAC = (isInitialized:boolean) => ({type:'APP/SET-IS
 
 //Thunks
 
-export const initializedAppTC = ():AppThunk => async (dispatch:Dispatch) => {
-    try {
-        const result = await authAPI.me()
-        if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
-            dispatch(setIsLoggedIn(true))
-        }else {
-            handleServerAppError(result.data, dispatch)
-        }
-        dispatch(setAppInitializedAC(true))
-    } catch (error) {
-        if (axios.isAxiosError<ErrorType>(error)) {
-            const errorMessage = error.response?.data ? error.response?.data.messages[0] : error.message
-            handleServerNetworkError(dispatch, errorMessage)
-        } else {
-            handleServerNetworkError(dispatch, (error as Error).message)
-        }
-    }
-}
+
 
 //Types
 
