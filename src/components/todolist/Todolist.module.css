@@ -1,20 +1,19 @@
 .todolist {
-    background-color: darkseagreen;
-    padding: 15px;
-    border-radius: 5px;
-    min-height: 300px;
+  background-color: darkseagreen;
+  padding: 15px;
+  border-radius: 5px;
+  min-height: 300px;
 }
 
 .buttonTaskFilter {
-    background-color: teal;
-    border-radius: 3px;
-    border-color: teal;
+  background-color: teal;
+  border-radius: 3px;
+  border-color: teal;
 }
 
 .buttonTaskFilterActive {
-    background-color: coral;
-    color: white;
-    border-radius: 3px;
-    border-color: coral;
-
+  background-color: coral;
+  color: white;
+  border-radius: 3px;
+  border-color: coral;
 }

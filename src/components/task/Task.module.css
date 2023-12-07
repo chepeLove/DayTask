@@ -1,7 +1,7 @@
 .task {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .taskDone {
-    text-decoration: line-through;
+  text-decoration: line-through;
 }
