@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks/hooks";
-import { setAppErrorAC } from "../../reducers/app-reducer";
+import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { appActions } from "reducers/app-reducer";
 
 export const ErrorSnackbar = () => {
   const errorMessage = useAppSelector((state) => state.app.error);
@@ -11,7 +11,7 @@ export const ErrorSnackbar = () => {
   useEffect(() => {
     if (errorMessage) {
       toast.error(errorMessage);
-      dispatch(setAppErrorAC(null));
+      dispatch(appActions.setAppError({ error: null }));
     }
   }, [errorMessage]);
 
