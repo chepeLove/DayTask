@@ -1,30 +1,27 @@
-const initialState: InitialStateType = {
-  status: "idle",
-  error: null,
-  isInitialized: false,
-};
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const AppReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-  switch (action.type) {
-    case "APP/SET-STATUS": {
-      return { ...state, status: action.payload.status };
-    }
-    case "APP/SET-ERROR": {
-      return { ...state, error: action.payload.error };
-    }
-    case "APP/SET-IS-INITIALIZED": {
-      return { ...state, isInitialized: action.payload.isInitialized };
-    }
-    default:
-      return state;
-  }
-};
+const appSlice = createSlice({
+  name: "app",
+  initialState: {
+    status: "idle" as RequestStatusType,
+    error: null as null | string,
+    isInitialized: false,
+  },
+  reducers: {
+    setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
+      state.status = action.payload.status;
+    },
+    setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
+      state.error = action.payload.error;
+    },
+    setAppInitialize: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
+      state.isInitialized = action.payload.isInitialized;
+    },
+  },
+});
 
-//Actions
-export const setAppStatusAC = (status: RequestStatusType) => ({ type: "APP/SET-STATUS", payload: { status } }) as const;
-export const setAppErrorAC = (error: string | null) => ({ type: "APP/SET-ERROR", payload: { error } }) as const;
-export const setAppInitializedAC = (isInitialized: boolean) =>
-  ({ type: "APP/SET-IS-INITIALIZED", payload: { isInitialized } }) as const;
+export const appReducer = appSlice.reducer;
+export const appActions = appSlice.actions;
 
 //Thunks
 
@@ -37,8 +34,3 @@ export type InitialStateType = {
   error: string | null;
   isInitialized: boolean;
 };
-
-type ActionsType = SetAppStatusACType | SetAppErrorACType | SetAppInitializedACType;
-type SetAppStatusACType = ReturnType<typeof setAppStatusAC>;
-type SetAppErrorACType = ReturnType<typeof setAppErrorAC>;
-type SetAppInitializedACType = ReturnType<typeof setAppInitializedAC>;
