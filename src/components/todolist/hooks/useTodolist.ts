@@ -2,16 +2,16 @@ import {
   createTodolistTC,
   deleteTodolistTC,
   FilterValuesType,
-  setTodolistTC,
   TodolistDomainType,
   todolistsActions,
   updateTodolistTitleTC,
 } from "reducers/todolists-reducer";
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
+import { selectTodolists } from "components/todolist/todolist-selectors";
 
 export const useTodolist = () => {
-  const todolist = useAppSelector<TodolistDomainType[]>((state) => state.todolists);
+  const todolist = useAppSelector<TodolistDomainType[]>(selectTodolists);
   const dispatch = useAppDispatch();
 
   const addTodolist = useCallback(

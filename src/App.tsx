@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect } from "react";
 import "./App.css";
-import { TodolistList } from "./components/todolistsList/TodolistList";
-import { Login } from "./components/login/Login";
+import { TodolistList } from "components/todolistsList/TodolistList";
+import { Login } from "components/login/Login";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "./store/hooks/hooks";
-import { Preloader } from "./components/preloader/Preloader";
-import { Button } from "./components/button/Button";
-import { logoutTC, meTC } from "./reducers/auth-reducer";
-import { ErrorSnackbar } from "./components/errorSnackbar/ErrorSnackbar";
-import { RequestStatusType } from "./reducers/app-reducer";
-import { LinearProgress } from "./components/linearProgress/LinearProgress";
+import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
+import { Preloader } from "components/preloader/Preloader";
+import { Button } from "components/button/Button";
+import { logoutTC, meTC } from "reducers/auth-reducer";
+import { ErrorSnackbar } from "components/errorSnackbar/ErrorSnackbar";
+import { RequestStatusType } from "reducers/app-reducer";
+import { LinearProgress } from "components/linearProgress/LinearProgress";
+import { selectAppStatus, selectIsInitialized } from "reducers/app-selectors";
 
 function App() {
-  const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized);
-  const status = useAppSelector<RequestStatusType>((state) => state.app.status);
+  const isInitialized = useAppSelector<boolean>(selectIsInitialized);
+  const status = useAppSelector<RequestStatusType>(selectAppStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

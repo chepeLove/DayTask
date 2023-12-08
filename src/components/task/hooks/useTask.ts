@@ -1,8 +1,8 @@
-import { updateTaskTC, createTaskTC, deleteTaskTC, TaskDomainType } from "../../../reducers/tasks-reducer";
+import { updateTaskTC, createTaskTC, deleteTaskTC, TaskDomainType } from "reducers/tasks-reducer";
 import { useCallback } from "react";
-import { FilterValuesType } from "../../../reducers/todolists-reducer";
-import { TasksStatuses } from "../../../api/api";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks/hooks";
+import { FilterValuesType } from "reducers/todolists-reducer";
+import { TasksStatuses } from "api/api";
+import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
 
 export const useTask = (todolistId: string) => {
   const tasks = useAppSelector<TaskDomainType[]>((state) => state.tasks[todolistId]);

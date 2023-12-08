@@ -7,11 +7,13 @@ import { Navigate } from "react-router-dom";
 import s from "./TodolistsList.module.css";
 import { RequestStatusType } from "reducers/app-reducer";
 import { setTodolistTC } from "reducers/todolists-reducer";
+import { selectIsLoggedIn } from "reducers/auth-selectors";
+import { selectAppStatus } from "reducers/app-selectors";
 
 export const TodolistList = () => {
   const { todolist, addTodolist } = useTodolist();
-  const isLoggedIn = useAppSelector<boolean>((state) => state.auth.isLoggedIn);
-  const status = useAppSelector<RequestStatusType>((state) => state.app.status);
+  const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn);
+  const status = useAppSelector<RequestStatusType>(selectAppStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
