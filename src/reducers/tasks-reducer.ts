@@ -99,7 +99,7 @@ export const createTaskTC =
       } else {
         handleServerAppError(result.data, dispatch);
       }
-      dispatch(appActions.setAppStatus({ status: "loading" }));
+      dispatch(appActions.setAppStatus({ status: "succeeded" }));
       dispatch(todolistsActions.changeTodolistEntityStatus({ id: todolistId, status: "succeeded" }));
     } catch (error) {
       if (axios.isAxiosError<ErrorType>(error)) {
@@ -120,7 +120,7 @@ export const deleteTaskTC =
       const result = await taskAPI.deleteTask(todolistId, taskId);
       if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
         dispatch(tasksActions.removeTask({ todolistId, taskId }));
-        dispatch(appActions.setAppStatus({ status: "loading" }));
+        dispatch(appActions.setAppStatus({ status: "succeeded" }));
         dispatch(tasksActions.changeEntityStatusTask({ todolistId, taskId, status: "succeeded" }));
       } else {
         handleServerAppError(result.data, dispatch);
