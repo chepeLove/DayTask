@@ -3,10 +3,10 @@ import { Task } from "../task/Task";
 import { Button } from "../button/Button";
 import { AddItemForm } from "../addItemForm/AddItemForm";
 import { EditableSpan } from "../editableSpan/EditableSpan";
-import { TodolistDomainType } from "../../reducers/todolists-reducer";
+import { TodolistDomainType } from "reducers/todolists-reducer";
 import { useTodolist } from "./hooks/useTodolist";
 import { useTask } from "../task/hooks/useTask";
-import { TaskDomainType } from "../../reducers/tasks-reducer";
+import { TaskDomainType } from "reducers/tasks-reducer";
 import s from "./Todolist.module.css";
 
 type TodolistPropsType = {
@@ -24,7 +24,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist }) =
 
   const tasksList = tasks.length ? (
     <ul>
-      {tasksForTodolist.map((task) => {
+      {tasksForTodolist?.map((task) => {
         return <Task key={task.id} todolistId={id} {...task} />;
       })}
     </ul>

@@ -1,30 +1,22 @@
 import {
-  changeFilterAC,
   createTodolistTC,
   deleteTodolistTC,
   FilterValuesType,
   setTodolistTC,
   TodolistDomainType,
+  todolistsActions,
   updateTodolistTitleTC,
-} from "../../../reducers/todolists-reducer";
-import { useCallback, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks/hooks";
+} from "reducers/todolists-reducer";
+import { useCallback } from "react";
+import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
 
 export const useTodolist = () => {
   const todolist = useAppSelector<TodolistDomainType[]>((state) => state.todolists);
   const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector<boolean>((state) => state.auth.isLoggedIn);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(setTodolistTC());
-    }
-  }, []);
 
   const addTodolist = useCallback(
     (title: string) => {
-      let thunk = createTodolistTC(title);
-      dispatch(thunk);
+      dispatch(createTodolistTC(title));
     },
     [dispatch],
   );
@@ -45,8 +37,8 @@ export const useTodolist = () => {
   );
 
   const changeFilterTodolist = useCallback(
-    (todolistId: string, filter: FilterValuesType) => {
-      dispatch(changeFilterAC(todolistId, filter));
+    (id: string, filter: FilterValuesType) => {
+      dispatch(todolistsActions.changeTodolistFilter({ id, filter }));
     },
     [dispatch],
   );
