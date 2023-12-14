@@ -1,8 +1,9 @@
-import { TaskDomainType, tasksThunks } from "reducers/tasks-reducer";
+import { useAppSelector } from "common/hooks/useAppSelector";
+import { TaskDomainType, tasksThunks } from "features/todolistsList/model/tasks/tasksSlice";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useCallback } from "react";
-import { FilterValuesType } from "reducers/todolists-reducer";
-import { TasksStatuses } from "api/api";
-import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
+import { TasksStatuses } from "common/enums";
+import { FilterValuesType } from "features/todolistsList/model/todolists/todolistsSlice";
 
 export const useTask = (todolistId: string) => {
   const tasks = useAppSelector<TaskDomainType[]>((state) => state.tasks[todolistId]);

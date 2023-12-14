@@ -1,10 +1,12 @@
-import { RESULT_CODE, todolistAPI, TodolistType } from "api/api";
-import { appActions, RequestStatusType } from "./app-reducer";
-import { handleServerAppError } from "utils/handleServerAppError";
+import { appActions, RequestStatusType } from "app/appSlice";
+import { handleServerAppError } from "common/utils/handleServerAppError";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { handleServerNetworkError } from "utils/handleServerNetworkError";
-import { tasksThunks } from "reducers/tasks-reducer";
-import { createAppAsyncThunk } from "utils/createAppAsyncThunk";
+import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
+import { tasksThunks } from "features/todolistsList/model/tasks/tasksSlice";
+import { createAppAsyncThunk } from "common/utils/createAppAsyncThunk";
+import { TodolistType } from "features/todolistsList/api/todolistsApi/todolistsApi.types";
+import { todolistsAPI } from "features/todolistsList/api/todolistsApi/todolistsApi";
+import { RESULT_CODE } from "common/enums";
 
 const slice = createSlice({
   name: "todoLists",
@@ -59,7 +61,7 @@ export const setTodoLists = createAppAsyncThunk<{
   const { dispatch, rejectWithValue } = thunkAPI;
   try {
     dispatch(appActions.setAppStatus({ status: "loading" }));
-    const result = await todolistAPI.getTodolists();
+    const result = await todolistsAPI.getTodolists();
     dispatch(appActions.setAppStatus({ status: "succeeded" }));
     result.data.forEach((todolist) => {
       dispatch(tasksThunks.setTasks(todolist.id));
@@ -77,7 +79,7 @@ export const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, { tit
     const { dispatch, rejectWithValue } = thunkAPI;
     try {
       dispatch(appActions.setAppStatus({ status: "loading" }));
-      const result = await todolistAPI.createTodolist(arg.title);
+      const result = await todolistsAPI.createTodolist(arg.title);
       if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
         dispatch(appActions.setAppStatus({ status: "succeeded" }));
         return { todolist: result.data.data.item };
@@ -99,7 +101,7 @@ export const deleteTodolist = createAppAsyncThunk<{ id: string }, { id: string }
     try {
       dispatch(appActions.setAppStatus({ status: "loading" }));
       dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.id, status: "loading" }));
-      const result = await todolistAPI.deleteTodolist(arg.id);
+      const result = await todolistsAPI.deleteTodolist(arg.id);
       if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
         dispatch(appActions.setAppStatus({ status: "succeeded" }));
         return { id: arg.id };
@@ -123,7 +125,7 @@ export const updateTodolistTitle = createAppAsyncThunk<{ id: string; title: stri
     try {
       dispatch(appActions.setAppStatus({ status: "loading" }));
       dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.id, status: "loading" }));
-      const result = await todolistAPI.updateTodolistTitle(arg.id, arg.title);
+      const result = await todolistsAPI.updateTodolistTitle(arg.id, arg.title);
       if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
         dispatch(appActions.setAppStatus({ status: "loading" }));
         dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.id, status: "succeeded" }));
@@ -141,7 +143,7 @@ export const updateTodolistTitle = createAppAsyncThunk<{ id: string; title: stri
   },
 );
 
-export const todolistsReducer = slice.reducer;
+export const todolistsSlice = slice.reducer;
 export const todolistsActions = slice.actions;
 export const todoListsThunks = { setTodoLists, addTodolist, deleteTodolist, updateTodolistTitle };
 

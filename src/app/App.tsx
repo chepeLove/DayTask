@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect } from "react";
-import "./App.css";
-import { TodolistList } from "components/todolistsList/TodolistList";
-import { Login } from "components/login/Login";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
-import { Preloader } from "components/preloader/Preloader";
-import { Button } from "components/button/Button";
-import { ErrorSnackbar } from "components/errorSnackbar/ErrorSnackbar";
-import { RequestStatusType } from "reducers/app-reducer";
-import { LinearProgress } from "components/linearProgress/LinearProgress";
-import { selectAppStatus, selectIsInitialized } from "reducers/app-selectors";
-import { authThunks } from "reducers/auth-reducer";
+import { useAppSelector } from "common/hooks/useAppSelector";
+import { selectAppStatus, selectIsInitialized } from "app/appSelectors";
+import { RequestStatusType } from "app/appSlice";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { authThunks } from "features/auth/model/authSlice";
+import { Button, ErrorSnackbar, LinearProgress, Preloader } from "common/components";
+import { Login } from "features/auth/ui/Login/Login";
+import { TodolistList } from "features/todolistsList/ui/TodolistsList/TodolistList";
 
 function App() {
   const isInitialized = useAppSelector<boolean>(selectIsInitialized);

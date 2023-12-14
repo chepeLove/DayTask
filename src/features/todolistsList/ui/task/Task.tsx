@@ -1,11 +1,11 @@
 import React, { ChangeEvent } from "react";
-import { CheckBox } from "../checkbox/CheckBox";
-import { Button } from "../button/Button";
-import { EditableSpan } from "../editableSpan/EditableSpan";
-import { useTask } from "./hooks/useTask";
-import { TasksStatuses } from "../../api/api";
-import { TaskDomainType } from "../../reducers/tasks-reducer";
-import s from "./Task.module.css";
+import { CheckBox } from "common/components/Checkbox/CheckBox";
+import { Button } from "common/components/Button/Button";
+import { EditableSpan } from "common/components/EditableSpan/EditableSpan";
+import { useTask } from "features/todolistsList/ui/task/hooks/useTask";
+import { TaskDomainType } from "features/todolistsList/model/tasks/tasksSlice";
+import s from "features/todolistsList/ui/task/Task.module.css";
+import { TasksStatuses } from "common/enums";
 
 type TaskPropsType = {
   todolistId: string;

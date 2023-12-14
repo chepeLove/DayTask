@@ -1,7 +1,13 @@
-import { FilterValuesType, TodolistDomainType, todolistsActions, todoListsThunks } from "reducers/todolists-reducer";
+import {
+  FilterValuesType,
+  TodolistDomainType,
+  todolistsActions,
+  todoListsThunks,
+} from "features/todolistsList/model/todolists/todolistsSlice";
 import { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
-import { selectTodolists } from "components/todolist/todolist-selectors";
+import { selectTodolists } from "features/todolistsList/ui/todolist/todolist-selectors";
+import { useAppSelector } from "common/hooks/useAppSelector";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 
 export const useTodolist = () => {
   const todolist = useAppSelector<TodolistDomainType[]>(selectTodolists);

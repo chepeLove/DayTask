@@ -1,6 +1,6 @@
-import { ResponseType } from "api/api";
-import { appActions } from "reducers/app-reducer";
-import { AppDispatch } from "store/store";
+import { appActions } from "app/appSlice";
+import { AppDispatch } from "app/store";
+import { ResponseType } from "common/types";
 
 export type ErrorType = {
   statusCode: number;

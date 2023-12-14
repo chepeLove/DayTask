@@ -1,11 +1,12 @@
-import { authAPI, LoginParamsType, RESULT_CODE } from "api/api";
-import { handleServerAppError } from "utils/handleServerAppError";
 import { createSlice } from "@reduxjs/toolkit";
-import { appActions } from "reducers/app-reducer";
-import { todolistsActions } from "reducers/todolists-reducer";
-import { tasksActions } from "reducers/tasks-reducer";
-import { handleServerNetworkError } from "utils/handleServerNetworkError";
-import { createAppAsyncThunk } from "utils/createAppAsyncThunk";
+import { appActions } from "app/appSlice";
+import { todolistsActions } from "features/todolistsList/model/todolists/todolistsSlice";
+import { tasksActions } from "features/todolistsList/model/tasks/tasksSlice";
+import { createAppAsyncThunk } from "common/utils/createAppAsyncThunk";
+import { handleServerAppError, handleServerNetworkError } from "common/utils";
+import { LoginParamsType } from "features/auth/api/authApi.types";
+import { authAPI } from "features/auth/api/authApi";
+import { RESULT_CODE } from "common/enums";
 
 const slice = createSlice({
   name: "auth",
@@ -92,7 +93,7 @@ export const logout = createAppAsyncThunk<{
   }
 });
 
-export const authReducer = slice.reducer;
+export const authSlice = slice.reducer;
 export const authActions = slice.actions;
 
 export const authThunks = { login, me, logout };
