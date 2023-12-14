@@ -1,4 +1,4 @@
-import { updateTaskTC, createTaskTC, deleteTaskTC, TaskDomainType } from "reducers/tasks-reducer";
+import { TaskDomainType, tasksThunks } from "reducers/tasks-reducer";
 import { useCallback } from "react";
 import { FilterValuesType } from "reducers/todolists-reducer";
 import { TasksStatuses } from "api/api";
@@ -10,28 +10,28 @@ export const useTask = (todolistId: string) => {
 
   const addTask = useCallback(
     (taskTitle: string) => {
-      dispatch(createTaskTC(todolistId, taskTitle));
+      dispatch(tasksThunks.addTask({ todolistId: todolistId, title: taskTitle }));
     },
     [dispatch],
   );
 
   const removeTask = useCallback(
     (id: string) => {
-      dispatch(deleteTaskTC(todolistId, id));
+      dispatch(tasksThunks.deleteTask({ todolistId, taskId: id }));
     },
     [dispatch],
   );
 
   const changeTaskStatus = useCallback(
     (status: TasksStatuses, id: string) => {
-      dispatch(updateTaskTC(todolistId, id, { status }));
+      dispatch(tasksThunks.updateTask({ todolistId, taskId: id, domainModel: { status } }));
     },
     [dispatch],
   );
 
   const changeTitleTask = useCallback(
     (title: string, id: string) => {
-      dispatch(updateTaskTC(todolistId, id, { title }));
+      dispatch(tasksThunks.updateTask({ todolistId, taskId: id, domainModel: { title } }));
     },
     [dispatch],
   );

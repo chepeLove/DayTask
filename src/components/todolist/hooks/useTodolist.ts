@@ -1,11 +1,4 @@
-import {
-  createTodolistTC,
-  deleteTodolistTC,
-  FilterValuesType,
-  TodolistDomainType,
-  todolistsActions,
-  updateTodolistTitleTC,
-} from "reducers/todolists-reducer";
+import { FilterValuesType, TodolistDomainType, todolistsActions, todoListsThunks } from "reducers/todolists-reducer";
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
 import { selectTodolists } from "components/todolist/todolist-selectors";
@@ -16,22 +9,21 @@ export const useTodolist = () => {
 
   const addTodolist = useCallback(
     (title: string) => {
-      dispatch(createTodolistTC(title));
+      dispatch(todoListsThunks.addTodolist({ title }));
     },
     [dispatch],
   );
 
-  const removeTodolist = useCallback(
-    (todolistId: string) => {
-      let thunk = deleteTodolistTC(todolistId);
-      dispatch(thunk);
+  const deleteTodolist = useCallback(
+    (id: string) => {
+      dispatch(todoListsThunks.deleteTodolist({ id }));
     },
     [dispatch],
   );
 
-  const changeTitleTodolist = useCallback(
+  const updateTodolistTitle = useCallback(
     (id: string, title: string) => {
-      dispatch(updateTodolistTitleTC(id, title));
+      dispatch(todoListsThunks.updateTodolistTitle({ id, title }));
     },
     [dispatch],
   );
@@ -46,8 +38,8 @@ export const useTodolist = () => {
   return {
     todolist,
     addTodolist,
-    removeTodolist,
-    changeTitleTodolist,
+    removeTodolist: deleteTodolist,
+    changeTitleTodolist: updateTodolistTitle,
     changeFilterTodolist,
   };
 };

@@ -6,9 +6,9 @@ import { AddItemForm } from "../addItemForm/AddItemForm";
 import { Navigate } from "react-router-dom";
 import s from "./TodolistsList.module.css";
 import { RequestStatusType } from "reducers/app-reducer";
-import { setTodolistTC } from "reducers/todolists-reducer";
 import { selectIsLoggedIn } from "reducers/auth-selectors";
 import { selectAppStatus } from "reducers/app-selectors";
+import { todoListsThunks } from "reducers/todolists-reducer";
 
 export const TodolistList = () => {
   const { todolist, addTodolist } = useTodolist();
@@ -18,7 +18,7 @@ export const TodolistList = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(setTodolistTC());
+      dispatch(todoListsThunks.setTodoLists());
     }
   }, []);
 
