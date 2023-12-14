@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const appSlice = createSlice({
+const slice = createSlice({
   name: "app",
   initialState: {
     status: "idle" as RequestStatusType,
@@ -20,8 +20,8 @@ const appSlice = createSlice({
   },
 });
 
-export const appReducer = appSlice.reducer;
-export const appActions = appSlice.actions;
+export const appReducer = slice.reducer;
+export const appActions = slice.actions;
 
 //Thunks
 

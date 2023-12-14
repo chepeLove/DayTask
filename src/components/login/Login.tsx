@@ -1,9 +1,9 @@
 import { useFormik } from "formik";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
-import { loginTC } from "reducers/auth-reducer";
 import { Navigate } from "react-router-dom";
 import { selectIsLoggedIn } from "reducers/auth-selectors";
+import { authThunks } from "reducers/auth-reducer";
 
 type FormikErrorType = {
   email?: string;
@@ -47,7 +47,7 @@ export const Login = () => {
       return errors;
     },
     onSubmit: (values) => {
-      dispatch(loginTC(values));
+      dispatch(authThunks.login({ loginParams: values }));
       formik.resetForm();
     },
   });

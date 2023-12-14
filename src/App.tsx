@@ -6,11 +6,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks/hooks";
 import { Preloader } from "components/preloader/Preloader";
 import { Button } from "components/button/Button";
-import { logoutTC, meTC } from "reducers/auth-reducer";
 import { ErrorSnackbar } from "components/errorSnackbar/ErrorSnackbar";
 import { RequestStatusType } from "reducers/app-reducer";
 import { LinearProgress } from "components/linearProgress/LinearProgress";
 import { selectAppStatus, selectIsInitialized } from "reducers/app-selectors";
+import { authThunks } from "reducers/auth-reducer";
 
 function App() {
   const isInitialized = useAppSelector<boolean>(selectIsInitialized);
@@ -18,11 +18,11 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(meTC());
+    dispatch(authThunks.me());
   }, []);
 
   const logoutHandler = useCallback(() => {
-    dispatch(logoutTC());
+    dispatch(authThunks.logout());
   }, []);
 
   if (!isInitialized) {
