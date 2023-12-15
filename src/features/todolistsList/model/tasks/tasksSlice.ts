@@ -85,7 +85,7 @@ export const addTask = createAppAsyncThunk<{ task: TaskType }, { todolistId: str
     try {
       dispatch(appActions.setAppStatus({ status: "loading" }));
       dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "loading" }));
-      const result = await taskApi.createTask(arg.todolistId, arg.title);
+      const result = await taskApi.createTask(arg);
       if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
         dispatch(appActions.setAppStatus({ status: "succeeded" }));
         dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "succeeded" }));
@@ -115,7 +115,7 @@ export const deleteTask = createAppAsyncThunk<
     dispatch(
       tasksActions.changeEntityStatusTask({ todolistId: arg.todolistId, taskId: arg.taskId, status: "loading" }),
     );
-    const result = await taskApi.deleteTask(arg.todolistId, arg.taskId);
+    const result = await taskApi.deleteTask(arg);
     if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
       dispatch(
@@ -163,7 +163,7 @@ export const updateTask = createAppAsyncThunk<UpdateTaskArgsType, UpdateTaskArgs
         dispatch(
           tasksActions.changeEntityStatusTask({ todolistId: arg.todolistId, taskId: arg.taskId, status: "succeeded" }),
         );
-        return { todolistId: arg.todolistId, taskId: arg.taskId, domainModel: arg.domainModel };
+        return arg;
       } else {
         handleServerAppError(result.data, dispatch);
         dispatch(
