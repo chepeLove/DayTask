@@ -19,7 +19,7 @@ const slice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoggedIn = action.payload.isLoggedIn;
       })
-      .addCase(me.fulfilled, (state, action) => {
+      .addCase(authMe.fulfilled, (state, action) => {
         state.isLoggedIn = action.payload.isLoggedIn;
       })
       .addCase(logout.fulfilled, (state, action) => {
@@ -51,7 +51,7 @@ const login = createAppAsyncThunk<{ isLoggedIn: boolean }, { loginParams: LoginP
   },
 );
 
-export const me = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name}/me`, async (arg, thunkAPI) => {
+export const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name}/me`, async (arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   try {
     dispatch(appActions.setAppStatus({ status: "loading" }));
@@ -96,6 +96,6 @@ export const logout = createAppAsyncThunk<{
 export const authSlice = slice.reducer;
 export const authActions = slice.actions;
 
-export const authThunks = { login, me, logout };
+export const authThunks = { login, me: authMe, logout };
 
 //Types
