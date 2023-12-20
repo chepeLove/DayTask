@@ -60,7 +60,6 @@ export const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
       return { isLoggedIn: true };
     } else {
-      handleServerAppError(result.data, dispatch);
       return rejectWithValue(null);
     }
   } catch (error) {
