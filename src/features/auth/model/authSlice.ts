@@ -94,8 +94,6 @@ export const logout = createAppAsyncThunk<{
 });
 
 export const authSlice = slice.reducer;
-export const authActions = slice.actions;
-
 export const authThunks = { login, me: authMe, logout };
 
 //Types
