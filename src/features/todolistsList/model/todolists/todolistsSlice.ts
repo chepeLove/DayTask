@@ -1,4 +1,4 @@
-import { appActions, RequestStatusType } from "app/appSlice";
+import { RequestStatusType } from "app/appSlice";
 import { handleServerAppError } from "common/utils/handleServerAppError";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { tasksThunks } from "features/todolistsList/model/tasks/tasksSlice";
@@ -61,7 +61,6 @@ export const setTodoLists = createAppAsyncThunk<{
   const { dispatch } = thunkAPI;
   return thunkTryCatch(thunkAPI, async () => {
     const result = await todolistsAPI.getTodolists();
-    dispatch(appActions.setAppStatus({ status: "succeeded" }));
     result.data.forEach((todolist) => {
       dispatch(tasksThunks.setTasks(todolist.id));
     });
@@ -76,7 +75,6 @@ export const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, { tit
     return thunkTryCatch(thunkAPI, async () => {
       const result = await todolistsAPI.createTodolist(arg.title);
       if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
-        dispatch(appActions.setAppStatus({ status: "succeeded" }));
         return { todolist: result.data.data.item };
       } else {
         handleServerAppError(result.data, dispatch);
