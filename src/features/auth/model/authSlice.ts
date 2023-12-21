@@ -51,7 +51,7 @@ const login = createAppAsyncThunk<{ isLoggedIn: boolean }, { loginParams: LoginP
   },
 );
 
-export const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name}/me`, async (arg, thunkAPI) => {
+export const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name}/me`, async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   try {
     dispatch(appActions.setAppStatus({ status: "loading" }));
@@ -72,7 +72,7 @@ export const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name
 
 export const logout = createAppAsyncThunk<{
   isLoggedIn: boolean;
-}>(`${slice.name}/logout`, async (arg, thunkAPI) => {
+}>(`${slice.name}/logout`, async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   try {
     dispatch(appActions.setAppStatus({ status: "loading" }));
