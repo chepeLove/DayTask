@@ -1,6 +1,6 @@
 import { appActions } from "app/appSlice";
 import { AppDispatch } from "app/store";
-import { ResponseType } from "common/types";
+import { BaseResponseType } from "common/types";
 
 export type ErrorType = {
   statusCode: number;
@@ -8,7 +8,7 @@ export type ErrorType = {
   error: string;
 };
 
-export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: AppDispatch) => {
+export const handleServerAppError = <D>(data: BaseResponseType<D>, dispatch: AppDispatch) => {
   if (data.messages.length) {
     dispatch(appActions.setAppError({ error: data.messages[0] }));
   } else {

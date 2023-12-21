@@ -1,1 +1,1 @@
-export type { ResponseType } from "./responseApi.types";
+export * from "./responseApi.types";
