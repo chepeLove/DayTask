@@ -40,10 +40,9 @@ const login = createAppAsyncThunk<{ isLoggedIn: boolean }, { loginParams: LoginP
       if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
         dispatch(appActions.setAppStatus({ status: "succeeded" }));
         return { isLoggedIn: true };
-      } else {
-        handleServerAppError(result.data, dispatch);
-        return rejectWithValue(null);
       }
+      handleServerAppError(result.data, dispatch);
+      return rejectWithValue(result.data);
     } catch (error) {
       handleServerNetworkError(error, dispatch);
       return rejectWithValue(null);
@@ -59,9 +58,9 @@ export const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name
     if (result.data.resultCode === RESULT_CODE.SUCCEEDED) {
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
       return { isLoggedIn: true };
-    } else {
-      return rejectWithValue(null);
     }
+    dispatch(appActions.setAppStatus({ status: "failed" }));
+    return rejectWithValue(null);
   } catch (error) {
     handleServerNetworkError(error, dispatch);
     return rejectWithValue(null);

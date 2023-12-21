@@ -5,6 +5,7 @@ import { selectIsLoggedIn } from "features/auth/model/authSelectors";
 import { authThunks } from "features/auth/model/authSlice";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useAppSelector } from "common/hooks/useAppSelector";
+import { BaseResponseType } from "common/types";
 
 type FormikErrorType = {
   email?: string;
@@ -47,9 +48,12 @@ export const Login = () => {
 
       return errors;
     },
-    onSubmit: (values) => {
-      dispatch(authThunks.login({ loginParams: values }));
-      formik.resetForm();
+    onSubmit: (values, formikHelpers) => {
+      dispatch(authThunks.login({ loginParams: values }))
+        .unwrap()
+        .catch((errorData: BaseResponseType) => {
+          errorData.fieldsErrors?.forEach((el) => formikHelpers.setFieldError(el.field, el.error));
+        });
     },
   });
 
