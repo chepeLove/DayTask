@@ -2,9 +2,9 @@ import React, { ChangeEvent } from "react";
 import { CheckBox } from "common/components/Checkbox/CheckBox";
 import { Button } from "common/components/Button/Button";
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan";
-import { useTask } from "features/todolistsList/ui/todolist/task/hooks/useTask";
+import { useTask } from "features/todolistsList/ui/todolist/tasks/task/hooks/useTask";
 import { TaskDomainType } from "features/todolistsList/model/tasks/tasksSlice";
-import s from "features/todolistsList/ui/todolist/task/Task.module.css";
+import s from "features/todolistsList/ui/todolist/tasks/task/Task.module.css";
 import { TasksStatuses } from "common/enums";
 
 type TaskPropsType = {
