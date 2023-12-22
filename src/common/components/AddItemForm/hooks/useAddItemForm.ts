@@ -1,6 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
+import { BaseResponseType } from "common/types";
 
-export const useAddItemForm = (onAddItem: (taskTitle: string) => void) => {
+export const useAddItemForm = (onAddItem: (taskTitle: string) => Promise<any>) => {
   const [title, setTitle] = useState("");
 
   const [error, setError] = useState<string | null>(null);
@@ -8,7 +9,13 @@ export const useAddItemForm = (onAddItem: (taskTitle: string) => void) => {
   const isAddTaskPossible = !title;
   const addNewItem = useCallback(() => {
     if (title.trim()) {
-      onAddItem(title.trim());
+      onAddItem(title.trim())
+        .then(() => {
+          setTitle("");
+        })
+        .catch((err: BaseResponseType) => {
+          setError(err.messages[0]);
+        });
     } else {
       setError("Please, enter text");
     }

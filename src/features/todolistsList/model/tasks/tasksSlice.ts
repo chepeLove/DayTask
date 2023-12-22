@@ -79,15 +79,15 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, { todolistId: string; ti
     const { dispatch, rejectWithValue } = thunkAPI;
     dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "loading" }));
     return thunkTryCatch(thunkAPI, async () => {
-      const res = await taskApi.createTask(arg);
-      if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+      const response = await taskApi.createTask(arg);
+      if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
         dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "succeeded" }));
-        const task = res.data.data.item;
+        const task = response.data.data.item;
         return { task };
       } else {
-        handleServerAppError(res.data, dispatch);
+        handleServerAppError(response.data, dispatch, false);
         dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "failed" }));
-        return rejectWithValue(null);
+        return rejectWithValue(response.data);
       }
     });
   },

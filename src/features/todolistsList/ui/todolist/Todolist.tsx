@@ -29,7 +29,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist }) =
         removeTodolist={removeTodolist}
       />
       <div>
-        <AddItemForm addItem={(title) => addTask(title)} disabled={todolist.entityStatus === "loading"} />
+        <AddItemForm addItem={addTask} disabled={todolist.entityStatus === "loading"} />
       </div>
       <Tasks todolistId={id} filter={filter} />
       <div>

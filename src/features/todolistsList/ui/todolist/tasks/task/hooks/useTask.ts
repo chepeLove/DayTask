@@ -11,7 +11,7 @@ export const useTask = (todolistId: string) => {
 
   const addTask = useCallback(
     (taskTitle: string) => {
-      dispatch(tasksThunks.addTask({ todolistId: todolistId, title: taskTitle }));
+      return dispatch(tasksThunks.addTask({ todolistId: todolistId, title: taskTitle })).unwrap();
     },
     [dispatch],
   );
