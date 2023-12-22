@@ -1,5 +1,7 @@
 import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit";
 import { AnyAction } from "redux";
+import { tasksThunks } from "features/todolistsList/model/tasks/tasksSlice";
+import { todoListsThunks } from "features/todolistsList/model/todolists/todolistsSlice";
 
 const slice = createSlice({
   name: "app",
@@ -27,7 +29,11 @@ const slice = createSlice({
       .addMatcher(isRejected, (state, action: AnyAction) => {
         state.status = "failed";
         if (action.payload) {
-          if (action.type === "todoLists/addTodolist/rejected") return;
+          if (
+            action.type === todoListsThunks.addTodolist.rejected.type ||
+            action.type === tasksThunks.addTask.rejected.type
+          )
+            return;
           state.error = action.payload.messages[0];
         } else {
           state.error = action.error.message ? action.error.message : "Some error occurred";
