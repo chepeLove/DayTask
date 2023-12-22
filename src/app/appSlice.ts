@@ -30,9 +30,7 @@ const slice = createSlice({
         (action: AnyAction) => {
           return action.type.endsWith("/fulfilled");
         },
-        (state, action) => {
-          console.log(action.type);
-
+        (state) => {
           state.status = "succeeded";
         },
       )
@@ -40,9 +38,7 @@ const slice = createSlice({
         (action: AnyAction) => {
           return action.type.endsWith("/rejected");
         },
-        (state, action) => {
-          console.log(action.type);
-
+        (state) => {
           state.status = "failed";
         },
       );
