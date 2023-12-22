@@ -1,7 +1,8 @@
-import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit";
 import { AnyAction } from "redux";
 import { tasksThunks } from "features/todolistsList/model/tasks/tasksSlice";
 import { todoListsThunks } from "features/todolistsList/model/todolists/todolistsSlice";
+import { authThunks } from "features/auth/model/authSlice";
 
 const slice = createSlice({
   name: "app",
@@ -13,9 +14,6 @@ const slice = createSlice({
   reducers: {
     setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
       state.error = action.payload.error;
-    },
-    setAppInitialize: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
-      state.isInitialized = action.payload.isInitialized;
     },
   },
   extraReducers: (builder) => {
@@ -31,13 +29,17 @@ const slice = createSlice({
         if (action.payload) {
           if (
             action.type === todoListsThunks.addTodolist.rejected.type ||
-            action.type === tasksThunks.addTask.rejected.type
+            action.type === tasksThunks.addTask.rejected.type ||
+            action.type === authThunks.me.rejected.type
           )
             return;
           state.error = action.payload.messages[0];
         } else {
           state.error = action.error.message ? action.error.message : "Some error occurred";
         }
+      })
+      .addMatcher(isAnyOf(authThunks.me.fulfilled, authThunks.me.rejected), (state) => {
+        state.isInitialized = true;
       });
   },
 });
