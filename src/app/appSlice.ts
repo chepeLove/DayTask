@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AnyAction } from "redux";
 
 const slice = createSlice({
   name: "app",
@@ -8,15 +9,43 @@ const slice = createSlice({
     isInitialized: false,
   },
   reducers: {
-    setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
-      state.status = action.payload.status;
-    },
     setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
       state.error = action.payload.error;
     },
     setAppInitialize: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
       state.isInitialized = action.payload.isInitialized;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(
+        (action: AnyAction) => {
+          return action.type.endsWith("/fulfilled");
+        },
+        (state) => {
+          state.status = "loading";
+        },
+      )
+      .addMatcher(
+        (action: AnyAction) => {
+          return action.type.endsWith("/fulfilled");
+        },
+        (state, action) => {
+          console.log(action.type);
+
+          state.status = "succeeded";
+        },
+      )
+      .addMatcher(
+        (action: AnyAction) => {
+          return action.type.endsWith("/rejected");
+        },
+        (state, action) => {
+          console.log(action.type);
+
+          state.status = "failed";
+        },
+      );
   },
 });
 
