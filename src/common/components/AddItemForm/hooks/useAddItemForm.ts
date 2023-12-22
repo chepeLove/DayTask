@@ -14,7 +14,9 @@ export const useAddItemForm = (onAddItem: (taskTitle: string) => Promise<any>) =
           setTitle("");
         })
         .catch((err: BaseResponseType) => {
-          setError(err.messages[0]);
+          if (err?.resultCode) {
+            setError(err.messages[0]);
+          }
         });
     } else {
       setError("Please, enter text");
