@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { appActions } from "app/appSlice";
 import { todolistsActions } from "features/todolistsList/model/todolists/todolistsSlice";
 import { tasksActions } from "features/todolistsList/model/tasks/tasksSlice";
@@ -7,6 +7,7 @@ import { handleServerAppError, thunkTryCatch } from "common/utils";
 import { LoginParamsType } from "features/auth/api/authApi.types";
 import { authAPI } from "features/auth/api/authApi";
 import { RESULT_CODE } from "common/enums";
+import { AnyAction } from "redux";
 
 const slice = createSlice({
   name: "auth",
@@ -15,34 +16,39 @@ const slice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(login.fulfilled, (state, action) => {
+    builder.addMatcher(
+      (action: AnyAction) => {
+        return (
+          action.type == "auth/me/fulfilled" ||
+          action.type == "auth/login/fulfilled" ||
+          action.type == "auth/logout/fulfilled"
+        );
+      },
+      (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
         state.isLoggedIn = action.payload.isLoggedIn;
-      })
-      .addCase(authMe.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn;
-      })
-      .addCase(logout.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn;
-      });
+      },
+    );
   },
 });
 
 //Thunks
 
-const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>(`${slice}/login`, async (arg, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI;
-  return thunkTryCatch(thunkAPI, async () => {
-    const response = await authAPI.login(arg);
-    if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
-      return { isLoggedIn: true };
-    } else {
-      const isShowAppError = !response.data?.fieldsErrors?.length;
-      handleServerAppError(response.data, dispatch, isShowAppError);
-      return rejectWithValue(response.data);
-    }
-  });
-});
+const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>(
+  `${slice.name}/login`,
+  async (arg, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI;
+    return thunkTryCatch(thunkAPI, async () => {
+      const response = await authAPI.login(arg);
+      if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
+        return { isLoggedIn: true };
+      } else {
+        const isShowAppError = !response.data?.fieldsErrors?.length;
+        handleServerAppError(response.data, dispatch, isShowAppError);
+        return rejectWithValue(response.data);
+      }
+    });
+  },
+);
 
 const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name}/me`, async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
