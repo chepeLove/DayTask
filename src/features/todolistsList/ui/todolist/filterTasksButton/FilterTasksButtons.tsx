@@ -9,7 +9,7 @@ type FilterTasksButtonsProps = {
   changeFilterTodolist: (id: string, value: FilterValuesType) => void;
 };
 export const FilterTasksButtons: FC<FilterTasksButtonsProps> = ({ filter, changeFilterTodolist, todolistId }) => {
-  const changeFilterTodolistHandler = (value: FilterValuesType) => () => {
+  const changeFilterTasksHandler = (value: FilterValuesType) => () => {
     changeFilterTodolist(todolistId, value);
   };
   return (
@@ -17,17 +17,17 @@ export const FilterTasksButtons: FC<FilterTasksButtonsProps> = ({ filter, change
       <Button
         className={filter === "all" ? s.buttonTaskFilterActive : s.buttonTaskFilter}
         name={"All"}
-        callBackButton={changeFilterTodolistHandler("all")}
+        callBackButton={changeFilterTasksHandler("all")}
       />
       <Button
         className={filter === "active" ? s.buttonTaskFilterActive : s.buttonTaskFilter}
         name={"Active"}
-        callBackButton={changeFilterTodolistHandler("active")}
+        callBackButton={changeFilterTasksHandler("active")}
       />
       <Button
         className={filter === "completed" ? s.buttonTaskFilterActive : s.buttonTaskFilter}
         name={"Completed"}
-        callBackButton={changeFilterTodolistHandler("completed")}
+        callBackButton={changeFilterTasksHandler("completed")}
       />
     </>
   );
