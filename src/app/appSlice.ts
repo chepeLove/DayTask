@@ -30,7 +30,7 @@ const slice = createSlice({
           if (
             action.type === todoListsThunks.addTodolist.rejected.type ||
             action.type === tasksThunks.addTask.rejected.type ||
-            action.type === authThunks.me.rejected.type
+            action.type === authThunks.authMe.rejected.type
           )
             return;
           state.error = action.payload.messages[0];
@@ -38,7 +38,7 @@ const slice = createSlice({
           state.error = action.error.message ? action.error.message : "Some error occurred";
         }
       })
-      .addMatcher(isAnyOf(authThunks.me.fulfilled, authThunks.me.rejected), (state) => {
+      .addMatcher(isAnyOf(authThunks.authMe.fulfilled, authThunks.authMe.rejected), (state) => {
         state.isInitialized = true;
       });
   },
@@ -46,10 +46,6 @@ const slice = createSlice({
 
 export const appSlice = slice.reducer;
 export const appActions = slice.actions;
-
-//Thunks
-
-//Types
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
 

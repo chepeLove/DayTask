@@ -14,11 +14,16 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      isAnyOf(authThunks.login.fulfilled, authThunks.logout.fulfilled, authThunks.me.fulfilled),
+      isAnyOf(authThunks.login.fulfilled, authThunks.logout.fulfilled, authThunks.authMe.fulfilled),
       (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
         state.isLoggedIn = action.payload.isLoggedIn;
       },
     );
+  },
+  selectors: {
+    selectIsLoggedIn: (sliceState) => {
+      return sliceState.isLoggedIn;
+    },
   },
 });
 
@@ -37,7 +42,7 @@ const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>(
   },
 );
 
-const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name}/me`, async (_, thunkAPI) => {
+const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(`${slice.name}/me`, async (_, thunkAPI) => {
   const { rejectWithValue } = thunkAPI;
   const response = await authAPI.me();
   if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
@@ -47,9 +52,12 @@ const authMe = createAppAsyncThunk<{ isLoggedIn: boolean }>(`${slice.name}/me`, 
   }
 });
 
-export const logout = createAppAsyncThunk<{
-  isLoggedIn: boolean;
-}>(`${slice.name}/logout`, async (_, thunkAPI) => {
+export const logout = createAppAsyncThunk<
+  {
+    isLoggedIn: boolean;
+  },
+  undefined
+>(`${slice.name}/logout`, async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   const response = await authAPI.logout();
   if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
@@ -62,6 +70,5 @@ export const logout = createAppAsyncThunk<{
 });
 
 export const authSlice = slice.reducer;
-export const authThunks = { login, me: authMe, logout };
-
-//Types
+export const authThunks = { login, authMe, logout };
+export const { selectIsLoggedIn } = slice.selectors;

@@ -15,7 +15,7 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(authThunks.me());
+    dispatch(authThunks.authMe());
   }, []);
 
   const logoutHandler = useCallback(() => {

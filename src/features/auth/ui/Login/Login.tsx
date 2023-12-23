@@ -1,11 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { selectIsLoggedIn } from "features/auth/model/authSelectors";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { useLogin } from "features/auth/lib/useLogin";
+import { selectIsLoggedIn } from "features/auth/model/authSlice";
 
 export const Login = () => {
-  const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const { formik } = useLogin();
 
   if (isLoggedIn) {
