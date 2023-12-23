@@ -5,9 +5,9 @@ import {
   todoListsThunks,
 } from "features/todolistsList/model/todolists/todolistsSlice";
 import { useCallback } from "react";
-import { selectTodolists } from "features/todolistsList/ui/todolist/todolist-selectors";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { selectTodolists } from "features/todolistsList/model/todolists/todolistSelectors";
 
 export const useTodolist = () => {
   const todolist = useAppSelector<TodolistDomainType[]>(selectTodolists);

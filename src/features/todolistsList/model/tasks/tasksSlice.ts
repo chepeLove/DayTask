@@ -57,6 +57,9 @@ const slice = createSlice({
         }
       });
   },
+  selectors: {
+    selectTask: (sliceState) => sliceState,
+  },
 });
 
 export const setTasks = createAppAsyncThunk<{ tasks: TaskType[] }, string>(

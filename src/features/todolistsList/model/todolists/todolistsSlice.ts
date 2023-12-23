@@ -22,7 +22,7 @@ const slice = createSlice({
         todolist.entityStatus = action.payload.status;
       }
     },
-    clearTodolistsData: () => {
+    clearTodoListsData: () => {
       return [];
     },
   },
@@ -49,6 +49,7 @@ const slice = createSlice({
         }
       });
   },
+  selectors: {},
 });
 
 //Thunks

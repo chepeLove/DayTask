@@ -61,7 +61,7 @@ export const logout = createAppAsyncThunk<
   const { dispatch, rejectWithValue } = thunkAPI;
   const response = await authAPI.logout();
   if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
-    dispatch(todolistsActions.clearTodolistsData());
+    dispatch(todolistsActions.clearTodoListsData());
     dispatch(tasksActions.clearTasksData());
     return { isLoggedIn: false };
   } else {
