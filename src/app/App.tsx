@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAppSelector } from "common/hooks/useAppSelector";
-import { selectAppStatus, selectIsInitialized } from "app/appSelectors";
-import { RequestStatusType } from "app/appSlice";
+import { RequestStatusType, selectAppStatus, selectIsInitialized } from "app/appSlice";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { authThunks } from "features/auth/model/authSlice";
 import { Button, ErrorSnackbar, LinearProgress, Preloader } from "common/components";

@@ -4,12 +4,11 @@ import { Todolist } from "features/todolistsList/ui/todolist/Todolist";
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm";
 import { Navigate } from "react-router-dom";
 import s from "features/todolistsList/ui/TodolistsList/TodolistsList.module.css";
-import { RequestStatusType } from "app/appSlice";
-import { selectIsLoggedIn } from "features/auth/model/authSelectors";
-import { selectAppStatus } from "app/appSelectors";
+import { RequestStatusType, selectAppStatus } from "app/appSlice";
 import { todoListsThunks } from "features/todolistsList/model/todolists/todolistsSlice";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { selectIsLoggedIn } from "features/auth/model/authSlice";
 
 export const TodolistList = () => {
   const { todolist, addTodolist } = useTodolist();

@@ -42,10 +42,15 @@ const slice = createSlice({
         state.isInitialized = true;
       });
   },
+  selectors: {
+    selectIsInitialized: (sliceState) => sliceState.isInitialized,
+    selectAppStatus: (sliceState) => sliceState.status,
+  },
 });
 
 export const appSlice = slice.reducer;
 export const appActions = slice.actions;
+export const { selectIsInitialized, selectAppStatus } = slice.selectors;
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
 
