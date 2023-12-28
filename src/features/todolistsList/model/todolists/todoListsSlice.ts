@@ -49,10 +49,10 @@ const slice = createSlice({
         }
       });
   },
-  selectors: {},
+  selectors: {
+    selectTodoLists: (sliceState) => sliceState,
+  },
 });
-
-//Thunks
 
 export const setTodoLists = createAppAsyncThunk<{
   todoLists: TodolistType[];
@@ -81,9 +81,9 @@ export const deleteTodolist = createAppAsyncThunk<{ id: string }, { id: string }
   `${slice.name}/deleteTodolist`,
   async (arg, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI;
-    dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.id, status: "loading" }));
+    dispatch(todoListsActions.changeTodolistEntityStatus({ id: arg.id, status: "loading" }));
     const response = await todolistsAPI.deleteTodolist(arg.id).finally(() => {
-      dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.id, status: "idle" }));
+      dispatch(todoListsActions.changeTodolistEntityStatus({ id: arg.id, status: "idle" }));
     });
     if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
       return { id: arg.id };
@@ -97,21 +97,22 @@ export const updateTodolistTitle = createAppAsyncThunk<{ id: string; title: stri
   `${slice.name}/updateTodolistTitle`,
   async (arg, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI;
-    dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.id, status: "loading" }));
+    dispatch(todoListsActions.changeTodolistEntityStatus({ id: arg.id, status: "loading" }));
     const response = await todolistsAPI.updateTodolistTitle(arg.id, arg.title);
     if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
-      dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.id, status: "succeeded" }));
+      dispatch(todoListsActions.changeTodolistEntityStatus({ id: arg.id, status: "succeeded" }));
       return { id: arg.id, title: arg.title };
     } else {
-      dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.id, status: "failed" }));
+      dispatch(todoListsActions.changeTodolistEntityStatus({ id: arg.id, status: "failed" }));
       return rejectWithValue(response.data);
     }
   },
 );
 
-export const todolistsSlice = slice.reducer;
-export const todolistsActions = slice.actions;
+export const todoListsSlice = slice.reducer;
+export const todoListsActions = slice.actions;
 export const todoListsThunks = { setTodoLists, addTodolist, deleteTodolist, updateTodolistTitle };
+export const todoListsSelectors = slice.selectors;
 
 //Types
 export type FilterValuesType = "all" | "active" | "completed";
