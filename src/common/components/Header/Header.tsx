@@ -16,7 +16,12 @@ export const Header = () => {
 
   return (
     <header className={s.header}>
-      <img src={logoProject} alt="logo" />
+      <div>
+        <img src={logoProject} alt="logo" />
+        <h1>
+          Day<span className={s.name}>Task</span>
+        </h1>
+      </div>
       <div>
         <span>{userData.login}</span>
         <Button name={"log out"} callBackButton={logoutHandler} />

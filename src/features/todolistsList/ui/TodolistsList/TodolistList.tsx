@@ -11,11 +11,11 @@ import {
 } from "features/todolistsList/model/todolists/todoListsSlice";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { selectIsLoggedIn } from "features/auth/model/authSlice";
+import { authSelectors } from "features/auth/model/authSlice";
 
 export const TodolistList = () => {
   const todoLists = useAppSelector<TodolistDomainType[]>(todoListsSelectors.selectTodoLists);
-  const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn);
+  const isLoggedIn = useAppSelector<boolean>(authSelectors.selectIsLoggedIn);
   const status = useAppSelector<RequestStatusType>(appSelectors.selectAppStatus);
   const dispatch = useAppDispatch();
 

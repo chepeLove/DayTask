@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { Input } from "common/components/Input/Input";
+import s from "./EditableSpan.module.css";
 
 type EditableSpanType = {
   value: string;
@@ -26,6 +27,8 @@ export const EditableSpan: React.FC<EditableSpanType> = React.memo(({ value, onC
   return editMode && !disabled ? (
     <Input value={title} onBlurCallback={onBlur} onChangeCallback={onChange} />
   ) : (
-    <span onDoubleClick={changeEditMode}>{value}</span>
+    <span className={s.spanText} onDoubleClick={changeEditMode}>
+      {value}
+    </span>
   );
 });

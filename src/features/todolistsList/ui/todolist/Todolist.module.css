@@ -1,19 +1,22 @@
 .todolist {
-  background-color: darkseagreen;
-  padding: 15px;
-  border-radius: 5px;
-  min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: #212832;;
+    padding: 15px;
+    border-radius: 20px;
+    width: 250px;
+    height: 400px;
 }
 
 .buttonTaskFilter {
-  background-color: teal;
-  border-radius: 3px;
-  border-color: teal;
+    background-color: #617D8A;;
+    border-radius: 3px;
+    border-color:  #617D8A;
 }
 
 .buttonTaskFilterActive {
-  background-color: coral;
-  color: white;
-  border-radius: 3px;
-  border-color: coral;
+    background-color: rgba(254, 211, 106, 1);
+    color:black;
+    border-radius: 3px;
+    border-color: rgba(254, 211, 106, 1);
 }

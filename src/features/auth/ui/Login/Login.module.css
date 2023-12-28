@@ -1,0 +1,38 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 428px;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    background: #212832;
+    border-radius: 2px;
+}
+
+.label{
+    color: #8CAAB9;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.inputForm {
+    background-color: #455A64;
+    outline: none;
+    border: none;
+    padding: 5px;
+    color: #FFF;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 18.857px;
+    border-radius: 5px;
+}
+
+.buttonForm {
+    background: #FED36A;
+    padding: 10px 50px;
+    cursor: pointer;
+
+}
