@@ -1,6 +1,6 @@
 import { RequestStatusType } from "app/appSlice";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { todolistsActions, todoListsThunks } from "features/todolistsList/model/todolists/todolistsSlice";
+import { todoListsActions, todoListsThunks } from "features/todolistsList/model/todolists/todoListsSlice";
 import { createAppAsyncThunk } from "common/utils/createAppAsyncThunk";
 import { taskApi, TaskType, UpdateTaskType } from "features/todolistsList/api/tasksApi";
 import { RESULT_CODE, TaskPriorities, TasksStatuses } from "common/enums";
@@ -59,6 +59,16 @@ const slice = createSlice({
   },
   selectors: {
     selectTask: (sliceState) => sliceState,
+    filteredTasksByTodolistId: (sliceState, args) => {
+      let tasksForTodoLists: TaskDomainType[] = slice.getSelectors().selectTask(sliceState)[args.todolistId];
+      if (args.filter === "active") {
+        tasksForTodoLists = tasksForTodoLists.filter((task) => task.status === TasksStatuses.New);
+      }
+      if (args.filter === "completed") {
+        tasksForTodoLists = tasksForTodoLists.filter((task) => task.status === TasksStatuses.Completed);
+      }
+      return tasksForTodoLists;
+    },
   },
 });
 
@@ -66,9 +76,9 @@ export const setTasks = createAppAsyncThunk<{ tasks: TaskType[] }, string>(
   `${slice.name}/setTasks`,
   async (todolistId, thunkAPI) => {
     const { dispatch } = thunkAPI;
-    dispatch(todolistsActions.changeTodolistEntityStatus({ id: todolistId, status: "loading" }));
+    dispatch(todoListsActions.changeTodolistEntityStatus({ id: todolistId, status: "loading" }));
     const response = await taskApi.getTasks(todolistId);
-    dispatch(todolistsActions.changeTodolistEntityStatus({ id: todolistId, status: "succeeded" }));
+    dispatch(todoListsActions.changeTodolistEntityStatus({ id: todolistId, status: "succeeded" }));
     return { tasks: response.data.items };
   },
 );
@@ -77,14 +87,14 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, { todolistId: string; ti
   `${slice.name}/addTask`,
   async (arg, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI;
-    dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "loading" }));
+    dispatch(todoListsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "loading" }));
     const response = await taskApi.createTask(arg);
     if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
-      dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "succeeded" }));
+      dispatch(todoListsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "succeeded" }));
       const task = response.data.data.item;
       return { task };
     } else {
-      dispatch(todolistsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "failed" }));
+      dispatch(todoListsActions.changeTodolistEntityStatus({ id: arg.todolistId, status: "failed" }));
       return rejectWithValue(response.data);
     }
   },
@@ -180,3 +190,5 @@ type UpdateTaskArgsType = {
 export const tasksSlice = slice.reducer;
 export const tasksActions = slice.actions;
 export const tasksThunks = { setTasks, addTask, deleteTask, updateTask };
+
+export const tasksSelectors = slice.selectors;
