@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAppSelector } from "common/hooks/useAppSelector";
-import { RequestStatusType, selectAppStatus, selectIsInitialized } from "app/appSlice";
+import { appSelectors, RequestStatusType } from "app/appSlice";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { authThunks } from "features/auth/model/authSlice";
 import { Button, ErrorSnackbar, LinearProgress, Preloader } from "common/components";
@@ -9,8 +9,8 @@ import { Login } from "features/auth/ui/Login/Login";
 import { TodolistList } from "features/todolistsList/ui/TodolistsList/TodolistList";
 
 function App() {
-  const isInitialized = useAppSelector<boolean>(selectIsInitialized);
-  const status = useAppSelector<RequestStatusType>(selectAppStatus);
+  const isInitialized = useAppSelector<boolean>(appSelectors.selectIsInitialized);
+  const status = useAppSelector<RequestStatusType>(appSelectors.selectAppStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

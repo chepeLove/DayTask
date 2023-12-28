@@ -3,7 +3,7 @@ import { Todolist } from "features/todolistsList/ui/todolist/Todolist";
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm";
 import { Navigate } from "react-router-dom";
 import s from "features/todolistsList/ui/TodolistsList/TodolistsList.module.css";
-import { RequestStatusType, selectAppStatus } from "app/appSlice";
+import { appSelectors, RequestStatusType } from "app/appSlice";
 import {
   TodolistDomainType,
   todoListsSelectors,
@@ -16,7 +16,7 @@ import { selectIsLoggedIn } from "features/auth/model/authSlice";
 export const TodolistList = () => {
   const todoLists = useAppSelector<TodolistDomainType[]>(todoListsSelectors.selectTodoLists);
   const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn);
-  const status = useAppSelector<RequestStatusType>(selectAppStatus);
+  const status = useAppSelector<RequestStatusType>(appSelectors.selectAppStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

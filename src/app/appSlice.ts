@@ -50,7 +50,7 @@ const slice = createSlice({
 
 export const appSlice = slice.reducer;
 export const appActions = slice.actions;
-export const { selectIsInitialized, selectAppStatus } = slice.selectors;
+export const appSelectors = slice.selectors;
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
 
