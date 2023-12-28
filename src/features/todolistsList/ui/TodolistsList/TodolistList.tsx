@@ -1,17 +1,20 @@
-import React, { useEffect } from "react";
-import { useTodolist } from "features/todolistsList/ui/todolist/hooks/useTodolist";
+import React, { useCallback, useEffect } from "react";
 import { Todolist } from "features/todolistsList/ui/todolist/Todolist";
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm";
 import { Navigate } from "react-router-dom";
 import s from "features/todolistsList/ui/TodolistsList/TodolistsList.module.css";
 import { RequestStatusType, selectAppStatus } from "app/appSlice";
-import { todoListsThunks } from "features/todolistsList/model/todolists/todolistsSlice";
+import {
+  TodolistDomainType,
+  todoListsSelectors,
+  todoListsThunks,
+} from "features/todolistsList/model/todolists/todoListsSlice";
 import { useAppSelector } from "common/hooks/useAppSelector";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { selectIsLoggedIn } from "features/auth/model/authSlice";
 
 export const TodolistList = () => {
-  const { todolist, addTodolist } = useTodolist();
+  const todoLists = useAppSelector<TodolistDomainType[]>(todoListsSelectors.selectTodoLists);
   const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn);
   const status = useAppSelector<RequestStatusType>(selectAppStatus);
   const dispatch = useAppDispatch();
@@ -22,11 +25,18 @@ export const TodolistList = () => {
     }
   }, []);
 
+  const addTodolist = useCallback(
+    (title: string) => {
+      return dispatch(todoListsThunks.addTodolist({ title })).unwrap();
+    },
+    [dispatch],
+  );
+
   if (!isLoggedIn) {
     return <Navigate to={"/login"} />;
   }
 
-  const todolistComponents = todolist.map((todolist) => <Todolist key={todolist.id} todolist={todolist} />);
+  const todolistComponents = todoLists.map((todolist) => <Todolist key={todolist.id} todolist={todolist} />);
 
   return (
     <>

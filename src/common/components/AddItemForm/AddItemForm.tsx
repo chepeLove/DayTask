@@ -9,19 +9,18 @@ type AddItemFormType = {
   disabled?: boolean;
 };
 export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, disabled = false }) => {
-  const { title, onChangeSetValue, onKeyDownSetValue, error, onClickAddTAsk, isAddTaskPossible } =
-    useAddItemForm(addItem);
+  const { title, onChangeValue, onKeyDownValue, error, onAddTask, isAddTaskPossible } = useAddItemForm(addItem);
 
   return (
     <div>
       <Input
         value={title}
         disabled={disabled}
-        onChangeCallback={onChangeSetValue}
-        onKeyDownCallback={onKeyDownSetValue}
+        onChangeCallback={onChangeValue}
+        onKeyDownCallback={onKeyDownValue}
         error={error}
       />
-      <Button name={"+"} callBackButton={onClickAddTAsk} disabled={isAddTaskPossible || disabled} />
+      <Button name={"+"} callBackButton={onAddTask} disabled={isAddTaskPossible || disabled} />
       {error && <div className={s.errorMessage}>{error}</div>}
     </div>
   );

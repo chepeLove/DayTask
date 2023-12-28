@@ -25,14 +25,14 @@ export const useAddItemForm = (onAddItem: (taskTitle: string) => Promise<any>) =
     setTitle("");
   }, [title]);
 
-  const onChangeSetValue = useCallback(
+  const onChangeValue = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setTitle(e.currentTarget.value);
     },
     [title],
   );
 
-  const onKeyDownSetValue = useCallback(
+  const onKeyDownValue = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       error && setError(null);
       e.key === "Enter" && addNewItem();
@@ -40,16 +40,16 @@ export const useAddItemForm = (onAddItem: (taskTitle: string) => Promise<any>) =
     [setError, addNewItem],
   );
 
-  const onClickAddTAsk = useCallback(() => {
+  const onAddTask = useCallback(() => {
     !isAddTaskPossible && addNewItem();
   }, [addNewItem]);
 
   return {
     title,
-    onChangeSetValue,
-    onKeyDownSetValue,
+    onChangeValue,
+    onKeyDownValue,
     error,
-    onClickAddTAsk,
+    onAddTask,
     isAddTaskPossible,
   };
 };

@@ -1,6 +1,5 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Input } from "common/components/Input/Input";
-import { useEditableSpan } from "common/components/EditableSpan/hooks/useEditableSpan";
 
 type EditableSpanType = {
   value: string;
@@ -8,7 +7,21 @@ type EditableSpanType = {
   disabled?: boolean;
 };
 export const EditableSpan: React.FC<EditableSpanType> = React.memo(({ value, onChangeTitleCallback, disabled }) => {
-  const { editMode, title, onBlur, onChange, changeEditMode } = useEditableSpan(value, onChangeTitleCallback);
+  const [editMode, setEditMode] = useState(false);
+  const [title, setTitle] = useState(value);
+
+  const changeEditMode = () => {
+    setEditMode(!editMode);
+    setTitle(title);
+  };
+  const onBlur = () => {
+    setEditMode(!editMode);
+    onChangeTitleCallback(title);
+  };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.currentTarget.value);
+  };
 
   return editMode && !disabled ? (
     <Input value={title} onBlurCallback={onBlur} onChangeCallback={onChange} />

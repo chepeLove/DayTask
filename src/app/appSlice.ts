@@ -1,7 +1,7 @@
 import { createSlice, isAnyOf, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit";
 import { AnyAction } from "redux";
 import { tasksThunks } from "features/todolistsList/model/tasks/tasksSlice";
-import { todoListsThunks } from "features/todolistsList/model/todolists/todolistsSlice";
+import { todoListsThunks } from "features/todolistsList/model/todolists/todoListsSlice";
 import { authThunks } from "features/auth/model/authSlice";
 
 const slice = createSlice({

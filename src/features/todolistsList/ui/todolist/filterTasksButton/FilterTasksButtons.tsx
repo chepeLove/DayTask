@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Button } from "common/components";
 import s from "features/todolistsList/ui/todolist/Todolist.module.css";
-import { FilterValuesType } from "features/todolistsList/model/todolists/todolistsSlice";
+import { FilterValuesType } from "features/todolistsList/model/todolists/todoListsSlice";
 
 type FilterTasksButtonsProps = {
   todolistId: string;

@@ -8,7 +8,7 @@ import {
   TodolistDomainType,
   setTodolistsAC,
   changeTodolistEntityStatusAC,
-} from "features/todolistsList/model/todolists/todolistsSlice";
+} from "features/todolistsList/model/todolists/todoListsSlice";
 import { v1 } from "uuid";
 import { RequestStatusType } from "app/appSlice";
 

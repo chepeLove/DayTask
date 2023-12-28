@@ -1,5 +1,5 @@
 import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
-import { todolistsActions } from "features/todolistsList/model/todolists/todolistsSlice";
+import { todoListsActions } from "features/todolistsList/model/todolists/todoListsSlice";
 import { tasksActions } from "features/todolistsList/model/tasks/tasksSlice";
 import { createAppAsyncThunk } from "common/utils/createAppAsyncThunk";
 import { LoginParamsType } from "features/auth/api/authApi.types";
@@ -61,7 +61,7 @@ export const logout = createAppAsyncThunk<
   const { dispatch, rejectWithValue } = thunkAPI;
   const response = await authAPI.logout();
   if (response.data.resultCode === RESULT_CODE.SUCCEEDED) {
-    dispatch(todolistsActions.clearTodoListsData());
+    dispatch(todoListsActions.clearTodoListsData());
     dispatch(tasksActions.clearTasksData());
     return { isLoggedIn: false };
   } else {

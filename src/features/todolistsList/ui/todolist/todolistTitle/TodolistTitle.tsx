@@ -6,23 +6,30 @@ type TodolistTitleProps = {
   id: string;
   title: string;
   entityStatus: RequestStatusType;
-  removeTodolist: (id: string) => void;
-  changeTitleTodolist: (id: string, title: string) => void;
+  deleteTodolist: (id: string) => void;
+  updateTodolistTitle: (id: string, title: string) => void;
 };
 export const TodolistTitle: FC<TodolistTitleProps> = ({
   id,
   title,
   entityStatus,
-  changeTitleTodolist,
-  removeTodolist,
+  updateTodolistTitle,
+  deleteTodolist,
 }) => {
+  const deleteTodolistHandler = (id: string) => () => {
+    deleteTodolist(id);
+  };
+
+  const updateTodolistTitleHandler = (id: string) => (title: string) => {
+    updateTodolistTitle(id, title);
+  };
   return (
     <div>
-      <Button name={"X"} callBackButton={() => removeTodolist(id)} disabled={entityStatus === "loading"} />
+      <Button name={"X"} callBackButton={deleteTodolistHandler(id)} disabled={entityStatus === "loading"} />
       <h3>
         <EditableSpan
           value={title}
-          onChangeTitleCallback={(title) => changeTitleTodolist(id, title)}
+          onChangeTitleCallback={updateTodolistTitleHandler(id)}
           disabled={entityStatus === "loading"}
         />
       </h3>

@@ -3,18 +3,11 @@ import { TaskDomainType, tasksThunks } from "features/todolistsList/model/tasks/
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useCallback } from "react";
 import { TasksStatuses } from "common/enums";
-import { FilterValuesType } from "features/todolistsList/model/todolists/todolistsSlice";
+import { FilterValuesType } from "features/todolistsList/model/todolists/todoListsSlice";
 
 export const useTask = (todolistId: string) => {
   const tasks = useAppSelector<TaskDomainType[]>((state) => state.tasks[todolistId]);
   const dispatch = useAppDispatch();
-
-  const addTask = useCallback(
-    (taskTitle: string) => {
-      return dispatch(tasksThunks.addTask({ todolistId: todolistId, title: taskTitle })).unwrap();
-    },
-    [dispatch],
-  );
 
   const removeTask = useCallback(
     (id: string) => {
@@ -53,7 +46,6 @@ export const useTask = (todolistId: string) => {
     removeTask,
     changeTaskStatus,
     changeTitleTask,
-    addTask,
     getTaskForRender,
   };
 };

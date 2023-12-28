@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { todolistsSlice } from "features/todolistsList/model/todolists/todolistsSlice";
+import { todoListsSlice } from "features/todolistsList/model/todolists/todoListsSlice";
 import { tasksSlice } from "features/todolistsList/model/tasks/tasksSlice";
 import { ThunkAction } from "redux-thunk";
 import { appSlice } from "app/appSlice";
@@ -9,7 +9,7 @@ import { configureStore } from "@reduxjs/toolkit";
 export const store = configureStore({
   reducer: {
     tasks: tasksSlice,
-    todolists: todolistsSlice,
+    todoLists: todoListsSlice,
     app: appSlice,
     auth: authSlice,
   },
