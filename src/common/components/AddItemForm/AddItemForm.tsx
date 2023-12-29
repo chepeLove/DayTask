@@ -5,7 +5,7 @@ import { useAddItemForm } from "common/components/AddItemForm/hooks/useAddItemFo
 import s from "common/components/AddItemForm/AddItemForm.module.css";
 
 type AddItemFormType = {
-  addItem: (taskTitle: string) => Promise<any>;
+  addItem: (taskTitle: string) => Promise<unknown>;
   disabled?: boolean;
 };
 export const AddItemForm: React.FC<AddItemFormType> = React.memo(({ addItem, disabled = false }) => {

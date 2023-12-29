@@ -1,4 +1,4 @@
-import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf, isFulfilled, PayloadAction } from "@reduxjs/toolkit";
 import { todoListsActions } from "features/todolistsList/model/todolists/todoListsSlice";
 import { tasksActions } from "features/todolistsList/model/tasks/tasksSlice";
 import { createAppAsyncThunk } from "common/utils/createAppAsyncThunk";
@@ -21,7 +21,7 @@ const slice = createSlice({
           state.isLoggedIn = action.payload.isLoggedIn;
         },
       )
-      .addMatcher(isAnyOf(authThunks.authMe.fulfilled), (state, action: PayloadAction<{ userData: userData }>) => {
+      .addMatcher(isFulfilled(authThunks.authMe), (state, action: PayloadAction<{ userData: userData }>) => {
         state.login = action.payload.userData;
       });
   },

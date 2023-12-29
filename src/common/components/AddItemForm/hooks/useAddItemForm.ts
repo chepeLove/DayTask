@@ -1,7 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 import { BaseResponseType } from "common/types";
 
-export const useAddItemForm = (onAddItem: (taskTitle: string) => Promise<any>) => {
+export const useAddItemForm = (onAddItem: (taskTitle: string) => Promise<unknown>) => {
   const [title, setTitle] = useState("");
 
   const [error, setError] = useState<string | null>(null);
